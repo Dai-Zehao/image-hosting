@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>戴泽浩 | R6 Studio 数字视觉架构</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&family=Manrope:wght@200..800&family=Syne:wght@400..800&family=Noto+Serif+SC:wght@700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        syne: ['Syne', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                        sans: ['Manrope', 'sans-serif'],
+                        chinese: ['"PingFang SC"', '"Microsoft YaHei"', 'sans-serif'],
+                        serifZh: ['"Noto Serif SC"', 'serif'], 
+                    },
+                    colors: { abyss: '#030303', bone: '#E8E8E3', vermillion: '#FF3B00', carbon: '#111111' }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+
+    <style>
+        body { background-color: #030303; color: #E8E8E3; cursor: none; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+        .noise-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 9999; opacity: 0.04; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"); }
+
+        @media (max-width: 768px) { body { cursor: auto; } .cursor-dot, .cursor-outline { display: none !important; } }
+        .cursor-dot, .cursor-outline { position: fixed; top: 0; left: 0; transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none; z-index: 10000; }
+        .cursor-dot { width: 6px; height: 6px; background-color: #FF3B00; }
+        .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(232, 232, 227, 0.4); background: transparent; transition: width 0.2s, height 0.2s; }
+        .cursor-hover .cursor-outline { width: 60px; height: 60px; border-color: #FF3B00; }
+
+        /* HERO INTERACTION ENGINE */
+        #title-designer {
+            font-size: clamp(3rem, 10vw, 110px); line-height: 0.8; transition: font-size 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
+            transform-origin: left bottom; -webkit-text-stroke: 1px #E8E8E3; color: transparent; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat;
+            background-image: radial-gradient(circle var(--c-rad, 20px) at var(--mx-d, -1000px) var(--my-d, -1000px), #030303 0%, #030303 98%, #E8E8E3 100%);
+            background-color: #E8E8E3;
+        }
+        #name-en {
+            font-size: clamp(1.8rem, 6.5vw, 75px); line-height: 0.8; color: transparent; -webkit-text-stroke: 1.5px #E8E8E3;
+            background-image: radial-gradient(circle 150px at var(--mx, -1000px) var(--my, -1000px), #FF3B00 0%, transparent 100%);
+            -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat;
+            transition: font-size 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease; transform-origin: left bottom;
+        }
+        #name-zh {
+            position: relative; font-size: clamp(1.5rem, 3.5vw, 40px); line-height: 1.2; color: #E8E8E3; opacity: 0.2; -webkit-text-stroke: 0px;
+            transition: font-size 0.8s cubic-bezier(0.16, 1, 0.3, 1), color 0.8s ease, opacity 0.8s ease;
+            transform-origin: left bottom; white-space: nowrap; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat;
+            background-image: radial-gradient(circle 450px at var(--mx-zh, -1000px) var(--my-zh, -1000px), #E8E8E3 0%, transparent 100%);
+        }
+        #name-r6 {
+            font-size: clamp(2rem, 9vw, 90px); line-height: 0.8; color: transparent; -webkit-background-clip: text; background-clip: text;
+            background-image: radial-gradient(circle 200px at var(--mx-r6, -1000px) var(--my-r6, -1000px), #ffffff 0%, #FF3B00 60%, #FF3B00 100%);
+            background-color: #FF3B00; background-repeat: no-repeat; transition: font-size 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease; transform-origin: left bottom;
+        }
+
+        .name-group.state-zh-active #title-designer { font-size: clamp(1.2rem, 3.5vw, 35px); opacity: 0.4; }
+        .name-group.state-zh-active #name-en { font-size: clamp(1rem, 3vw, 30px); color: #E8E8E3; -webkit-text-stroke: 0px; background-image: none; opacity: 0.2; }
+        .name-group.state-zh-active #name-r6 { opacity: 0.3; } 
+        .name-group.state-zh-active #name-zh { font-size: clamp(4.5rem, 18vw, 180px); color: transparent; -webkit-text-stroke: 1.5px #FF3B00; opacity: 1; }
+
+        /* 画廊系统 */
+        .gallery-item { position: relative; z-index: 1; flex-shrink: 0; }
+        .gallery-img { 
+            filter: grayscale(100%) brightness(0.15); 
+            transform: scale(0.96);
+            will-change: filter, transform;
+        }
+        .gallery-text-overlay { 
+            position: absolute; 
+            z-index: 60; 
+            opacity: 0; 
+            transform: translateY(30px);
+            will-change: opacity, transform;
+        }
+
+        /* 动画3 背景视差交互组 */
+        .core-bg-wrapper {
+            position: absolute;
+            opacity: 0;
+            will-change: transform, opacity;
+            z-index: 1; 
+            transition: z-index 0.3s;
+        }
+        .core-bg-wrapper:hover {
+            z-index: 50; 
+        }
+        .core-bg-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+            filter: brightness(0.4) contrast(1.1); 
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            pointer-events: auto; 
+        }
+        .core-bg-wrapper:hover .core-bg-img {
+            filter: brightness(1) contrast(1.05); 
+            transform: scale(1.15) translateY(-5px); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255, 59, 0, 0.2); 
+        }
+
+        /* 通用 SVG 样式 */
+        #cinematic-svg-container-1 svg, #cinematic-svg-container-2 svg, #cinematic-svg-container-3 svg { width: 100%; height: 100%; max-width: 1200px; overflow: visible; }
+        .svg-line { fill: none; stroke: #FF3B00; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+        .svg-line-bg { fill: none; stroke: rgba(232, 232, 227, 0.1); stroke-width: 1; }
+        .svg-fill-vermillion { fill: #FF3B00; }
+        .svg-text { font-family: 'Syne', 'PingFang SC', sans-serif; font-weight: 700; font-size: 20px; fill: #E8E8E3; opacity: 0; }
+        
+        .hero-sub::after { content: '_'; display: inline-block; margin-left: 4px; animation: blink 0.8s step-end infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+    </style>
+</head>
+<body class="selection:bg-vermillion selection:text-abyss relative">
+
+    <div class="noise-overlay"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <!-- 导航栏：采用 gcore 节点确保国内访问 -->
+    <nav class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 mix-blend-difference text-bone pointer-events-none">
+        <div class="hover-trigger flex items-center pointer-events-auto cursor-pointer">
+            <img src="https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/logo.png" 
+                 alt="R6 Studio Logo" 
+                 class="h-4 md:h-6 w-auto object-contain brightness-125">
+        </div>
+        <div class="font-syne font-bold text-base md:text-lg hover-trigger pointer-events-auto cursor-pointer">MENU</div>
+    </nav>
+
+    <!-- SECTION 1: HERO -->
+    <section id="hero" class="relative min-h-screen flex flex-col justify-center px-6 md:px-20 pt-24 md:pt-20">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 w-full max-w-7xl mx-auto">
+            <div class="md:col-span-12 relative z-10">
+                <p class="hero-sub font-mono text-vermillion mb-4 md:mb-6 tracking-widest text-xs md:text-sm uppercase" data-text="/// Initializing R6 Studio Core...">/// Initializing R6 Studio Core...</p>
+                <div id="name-group" class="name-group flex flex-col items-start w-full select-none overflow-visible relative z-20 pb-2 mt-2 md:mt-4">
+                    <div class="en-trigger overflow-visible pb-1 w-full flex justify-start cursor-pointer">
+                        <div class="hero-title-line"><h2 id="title-designer" class="font-syne font-extrabold tracking-tighter uppercase whitespace-nowrap pr-24 w-fit">DESIGNER</h2></div>
+                    </div>
+                    <div class="flex flex-row items-end gap-4 md:gap-10 w-full mt-1 md:mt-2">
+                        <div class="en-trigger overflow-visible pb-1 cursor-pointer">
+                            <div class="hero-title-line"><h2 id="name-en" class="font-syne font-extrabold tracking-tighter uppercase whitespace-nowrap pr-12 w-fit">DAI ZEHAO</h2></div>
+                        </div>
+                        <div id="zh-trigger" class="overflow-visible pb-1 cursor-pointer px-2 flex-shrink-0 z-30">
+                            <div class="hero-title-line"><h2 id="name-zh" data-text="戴泽浩" class="font-serifZh font-black tracking-tighter uppercase whitespace-nowrap hover-trigger py-4 pr-8 w-fit">戴泽浩</h2></div>
+                        </div>
+                    </div>
+                </div>
+                <div id="r6-trigger" class="overflow-visible mt-4 md:mt-10 mb-4 pb-2 w-full relative z-10 cursor-default">
+                    <div class="hero-title-line"><h2 id="name-r6" class="font-syne font-extrabold tracking-tighter uppercase whitespace-nowrap pr-24 w-fit">R6 STUDIO</h2></div>
+                </div>
+                <div class="overflow-hidden mt-4 md:mt-8">
+                    <p class="hero-tags font-mono text-vermillion text-[10px] md:text-base tracking-widest uppercase leading-loose">[ 数字视觉创作者 ] / [ 全媒体运营者 ] / [ 独立开发者 ]</p>
+                </div>
+            </div>
+            
+            <div class="md:col-span-12 mt-12 md:mt-16 flex flex-col items-start gap-10">
+                <div class="flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-10">
+                    <div class="shrink-0 pt-1">
+                        <p class="font-serifZh text-[26px] sm:text-[30px] md:text-[38px] text-vermillion font-black tracking-widest whitespace-nowrap m-0 leading-none">构建交互，重塑视觉。</p>
+                    </div>
+                    <div class="border-l-2 border-vermillion pl-4 md:pl-6 relative max-w-2xl">
+                        <p class="hero-desc font-chinese text-sm sm:text-base md:text-[18px] leading-relaxed text-bone/90 font-light m-0">“不只创造视觉，更构建完整体验，致力于将创意转化为具有商业价值的落地项目。”</p>
+                    </div>
+                </div>
+                <div class="hero-scroll flex items-center gap-3">
+                    <div class="w-8 h-[1px] bg-vermillion scroll-line"></div>
+                    <span class="font-mono text-[10px] uppercase tracking-widest text-bone/50">Scroll to Explore</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2.1: CINEMATIC MEDIA -->
+    <section id="cinematic-media" class="relative h-[100svh] w-full bg-carbon flex items-center justify-start overflow-hidden">
+        <div class="absolute inset-0 z-0 flex items-center pointer-events-none">
+            <div id="seq1-gallery" class="flex gap-20 md:gap-40 px-[50vw] w-max h-full items-center">
+                <div class="gallery-item w-[70vw] md:w-[600px] h-[45vh] md:h-[600px]">
+                    <img src="https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/1-11.jpg" class="gallery-img w-full h-full object-cover">
+                    <div class="gallery-text-overlay bottom-8 left-4 md:bottom-12 md:left-6">
+                        <span class="block font-syne text-4xl md:text-7xl font-bold text-bone mb-1 uppercase tracking-tight">VISUAL</span>
+                        <span class="block font-chinese text-lg md:text-3xl font-light text-bone tracking-widest opacity-80">视觉与摄影架构</span>
+                    </div>
+                </div>
+                <div class="gallery-item w-[60vw] md:w-[500px] h-[35vh] md:h-[400px]">
+                    <img src="https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/xm.jpg" class="gallery-img w-full h-full object-cover">
+                    <div class="gallery-text-overlay top-8 left-4 md:top-12 md:left-6">
+                        <span class="block font-syne text-4xl md:text-6xl font-bold text-bone mb-1 uppercase tracking-tight">ALGORITHM</span>
+                        <span class="block font-chinese text-base md:text-2xl font-light text-bone tracking-widest opacity-80">AI Code与AIGC</span>
+                    </div>
+                </div>
+                <div class="gallery-item w-[55vw] md:w-[450px] h-[55vh] md:h-[700px]">
+                    <img src="https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/1-33.jpg" class="gallery-img w-full h-full object-cover">
+                    <div class="gallery-text-overlay bottom-8 right-4 md:bottom-12 md:right-6 text-right">
+                        <span class="block font-syne text-4xl md:text-6xl font-bold text-bone mb-1 uppercase tracking-tight">GRAPHIC</span>
+                        <span class="block font-chinese text-base md:text-2xl font-light text-bone tracking-widest opacity-80">平面与动效</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="cinematic-svg-container-1" class="w-full h-full p-4 flex items-center justify-center relative z-20 mix-blend-difference pointer-events-none">
+            <svg viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet">
+                <g id="seq1-viewfinder">
+                    <path d="M 250 250 L 250 150 L 350 150" class="svg-line" id="vf-1" stroke-dasharray="1000" stroke-dashoffset="1000" />
+                    <path d="M 750 250 L 750 150 L 650 150" class="svg-line" id="vf-2" stroke-dasharray="1000" stroke-dashoffset="1000" />
+                    <path d="M 250 550 L 250 650 L 350 650" class="svg-line" id="vf-3" stroke-dasharray="1000" stroke-dashoffset="1000" />
+                    <path d="M 750 550 L 750 650 L 650 650" class="svg-line" id="vf-4" stroke-dasharray="1000" stroke-dashoffset="1000" />
+                    <circle cx="500" cy="400" r="80" class="svg-line" id="lens-ring" stroke-dasharray="1000" stroke-dashoffset="1000" />
+                    <g id="aperture-group" transform-origin="500 400">
+                        <polygon points="500,280 604,340 500,400" class="svg-line" />
+                        <polygon points="604,340 604,460 500,400" class="svg-line" />
+                        <polygon points="604,460 500,520 500,400" class="svg-line" />
+                        <polygon points="500,520 396,460 500,400" class="svg-line" />
+                        <polygon points="396,460 396,340 500,400" class="svg-line" />
+                        <polygon points="396,340 500,280 500,400" class="svg-line" />
+                    </g>
+                </g>
+                <g id="seq1-timeline">
+                    <line x1="200" y1="720" x2="800" y2="720" class="svg-line" id="timeline-track" stroke-dasharray="1000" stroke-dashoffset="1000" />
+                    <polygon points="190,700 210,700 200,720" class="svg-fill-vermillion" id="playhead" />
+                    <circle cx="850" cy="150" r="8" class="svg-fill-vermillion" id="rec-dot" opacity="0" />
+                    <text x="870" y="155" class="font-mono text-[14px] font-bold fill-vermillion" id="rec-text" opacity="0">REC</text>
+                </g>
+            </svg>
+        </div>
+    </section>
+
+    <!-- SECTION 2.2: EASING CURVE -->
+    <section id="cinematic-easing" class="relative h-[100svh] w-full bg-abyss flex items-center justify-center overflow-hidden">
+        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-30 pointer-events-none">
+            <source src="https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/hero-video.mp4" type="video/mp4">
+        </video>
+
+        <div id="cinematic-svg-container-2" class="w-full h-full p-4 flex items-center justify-center relative z-10">
+            <svg viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet">
+                <g class="bg-grid">
+                    <line x1="200" y1="600" x2="800" y2="600" class="svg-line-bg" />
+                    <line x1="200" y1="600" x2="200" y2="200" class="svg-line-bg" />
+                    <line x1="500" y1="200" x2="500" y2="600" class="svg-line-bg" stroke-dasharray="2 4"/>
+                </g>
+                <path d="M 200 600 C 200 600, 800 200, 800 200" class="svg-line" id="easing-path" stroke-dasharray="1500" stroke-dashoffset="1500" />
+                <line x1="200" y1="600" x2="200" y2="600" class="svg-line-bg" id="handle-line-1" stroke="#FF3B00" stroke-width="1" stroke-dasharray="4 4" />
+                <line x1="800" y1="200" x2="800" y2="200" class="svg-line-bg" id="handle-line-2" stroke="#FF3B00" stroke-width="1" stroke-dasharray="4 4" />
+                <circle cx="200" cy="600" r="8" fill="#E8E8E3" class="endpoint-2 scale-0" />
+                <circle cx="800" cy="200" r="8" fill="#E8E8E3" class="endpoint-2 scale-0" />
+                
+                <g id="seq2-labels" class="pointer-events-none">
+                    <g transform="translate(120, 150)">
+                        <text x="0" y="0" class="svg-text label-2" opacity="0">
+                            <tspan font-family="'Syne'" font-weight="800" font-size="28">ARCHITECTURE</tspan>
+                            <tspan x="0" dy="30" font-family="'chinese'" font-weight="300" font-size="18">UI 开发架构设计</tspan>
+                        </text>
+                    </g>
+                    <g transform="translate(630, 680)">
+                        <text x="0" y="0" class="svg-text label-2" opacity="0">
+                            <tspan font-family="'Syne'" font-weight="800" font-size="28">INTERACTIVE</tspan>
+                            <tspan x="0" dy="30" font-family="'chinese'" font-weight="300" font-size="18">核心特效与动画</tspan>
+                        </text>
+                    </g>
+                </g>
+            </svg>
+        </div>
+    </section>
+
+    <!-- SECTION 2.3: ARCHITECTURE CORE -->
+    <section id="cinematic-core" class="relative h-[100svh] w-full bg-carbon flex items-center justify-center overflow-hidden">
+        
+        <!-- 背景视察阵列容器 -->
+        <div id="core-bg-gallery" class="absolute inset-0 w-full h-full pointer-events-none">
+            <!-- 自动生成阵列 -->
+            <script>
+                const galleryContainer = document.querySelector('#core-bg-gallery');
+                const imagesCount = 14;
+                const rows = [
+                    { top: '8%', move: -30, count: 5 },
+                    { top: '40%', move: 30, count: 5 },
+                    { top: '72%', move: -30, count: 4 }
+                ];
+                let currentImg = 1;
+                rows.forEach((row, rowIndex) => {
+                    for(let i=0; i<row.count; i++) {
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'core-bg-wrapper pointer-events-auto';
+                        const leftPos = (100 / row.count) * i + (Math.random() * 5 - 2.5);
+                        wrapper.style.cssText = `top: ${row.top}; left: ${leftPos}vw; width: 15vw; height: 20vh;`;
+                        wrapper.setAttribute('data-move-vw', row.move);
+                        
+                        const img = document.createElement('img');
+                        img.src = `https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/dh3-${currentImg}.jpg`;
+                        img.className = 'core-bg-img hover-trigger';
+                        wrapper.appendChild(img);
+                        galleryContainer.appendChild(wrapper);
+                        currentImg++;
+                    }
+                });
+            </script>
+        </div>
+
+        <div id="cinematic-svg-container-3" class="w-full h-full p-4 flex items-center justify-center relative z-10 pointer-events-none">
+            <svg viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                    <clipPath id="avatar-clip">
+                        <circle cx="500" cy="400" r="36" />
+                    </clipPath>
+                </defs>
+                
+                <circle cx="500" cy="400" r="300" class="svg-line-bg" id="core-ring-1" stroke-dasharray="1890" stroke-dashoffset="1890" transform="rotate(-90 500 400)"/>
+                <circle cx="500" cy="400" r="150" class="svg-line-bg" id="core-ring-2" stroke-dasharray="945" stroke-dashoffset="945" transform="rotate(90 500 400)"/>
+                
+                <g id="core-crosshairs" opacity="0">
+                    <line x1="500" y1="80" x2="500" y2="120" class="svg-line-bg" stroke="#FF3B00" />
+                    <line x1="500" y1="680" x2="500" y2="720" class="svg-line-bg" stroke="#FF3B00" />
+                    <line x1="180" y1="400" x2="220" y2="400" class="svg-line-bg" stroke="#FF3B00" />
+                    <line x1="780" y1="400" x2="820" y2="400" class="svg-line-bg" stroke="#FF3B00" />
+                </g>
+
+                <circle cx="500" cy="400" r="40" class="svg-line" id="core-pulse" opacity="0" />
+                
+                <g id="core-avatar-group" opacity="0">
+                    <circle cx="500" cy="400" r="40" class="svg-line" stroke-width="2" />
+                    <!-- 已将头像更新为 touxiang2.jpg -->
+                    <image x="460" y="360" width="80" height="80" 
+                           href="https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/touxiang2.jpg" 
+                           xlink:href="https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/touxiang2.jpg" 
+                           clip-path="url(#avatar-clip)" preserveAspectRatio="xMidYMid slice" />
+                </g>
+                
+                <path id="path-orbit" class="svg-line" d="M 500 175 A 225 225 0 1 1 499 175" stroke-dasharray="1500" stroke-dashoffset="1500" />
+                <circle cx="725" cy="400" r="6" class="svg-fill-vermillion" id="orbit-sat-1" />
+                <circle cx="275" cy="400" r="6" class="svg-fill-bone" id="orbit-sat-2" />
+
+                <g id="core-lines">
+                    <line x1="500" y1="400" x2="720" y2="135" class="svg-line-bg node-line" stroke-dasharray="400" stroke-dashoffset="400" />
+                    <line x1="500" y1="400" x2="110" y2="635" class="svg-line-bg node-line" stroke-dasharray="600" stroke-dashoffset="600" />
+                    <line x1="500" y1="400" x2="40" y2="235" class="svg-line-bg node-line" stroke-dasharray="600" stroke-dashoffset="600" />
+                    <line x1="500" y1="400" x2="820" y2="525" class="svg-line-bg node-line" stroke-dasharray="400" stroke-dashoffset="400" />
+                </g>
+
+                <g transform="translate(730, 130)"><circle cx="-10" cy="6" r="3" class="svg-fill-vermillion node-dot" opacity="0"/><text x="0" y="10" class="svg-text label-3" opacity="0">省级奖项得主 (广东)</text></g>
+                <g transform="translate(100, 640)"><circle cx="-10" cy="6" r="3" class="svg-fill-vermillion node-dot" opacity="0"/><text x="0" y="10" class="svg-text label-3" opacity="0">壹图网签约摄影师</text></g>
+                <g transform="translate(25, 240)"><circle cx="-10" cy="6" r="3" class="svg-fill-bone node-dot" opacity="0"/><text x="0" y="10" class="svg-text label-3" opacity="0">图虫网签约供稿人</text></g>
+                <g transform="translate(830, 530)"><circle cx="-10" cy="6" r="3" class="svg-fill-bone node-dot" opacity="0"/><text x="0" y="10" class="svg-text label-3" opacity="0">全栈数字视觉输出</text></g>
+            </svg>
+        </div>
+    </section>
+
+    <!-- SECTION 3: FEATURES -->
+    <section id="features" class="relative bg-abyss py-24 md:py-32 px-6 md:px-20 overflow-hidden">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="font-syne text-4xl md:text-8xl font-bold uppercase mb-16 md:mb-20 leading-tight">
+                <span class="text-bone">What's this</span><br>
+                <span class="text-vermillion">webpage about</span><span class="text-vermillion" id="typewriter-dots"></span><span class="text-vermillion ml-1" style="animation: blink 0.8s step-end infinite;">_</span>
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="feature-card group pt-8 border-t border-bone/10">
+                    <h3 class="font-syne text-xl font-bold text-bone group-hover:text-vermillion mb-4 uppercase tracking-widest leading-snug">My Profiles</h3>
+                    <p class="font-chinese text-sm text-bone/60 leading-relaxed mb-12">这是一张动态的个人名片，不仅收录了我的线上履历与作品集，更存放着那些关于摄影光影、UI 交互以及视觉探索的灵感碎片。</p>
+                    <div class="w-full h-[2px] bg-bone/20 relative"><div class="absolute top-0 left-0 h-full w-0 bg-vermillion transition-all duration-500 group-hover:w-full"></div></div>
+                </div>
+                <div class="feature-card group pt-8 border-t border-bone/10 md:translate-y-12">
+                    <h3 class="font-syne text-xl font-bold text-bone group-hover:text-vermillion mb-4 uppercase tracking-widest leading-snug">CONNECT & LEARN</h3>
+                    <p class="font-chinese text-sm text-bone/60 leading-relaxed mb-12">保持热爱，无限进步。 技术的迭代与视觉的创新离不开思维的碰撞。非常期待与你连接，共同探索数字创意的边界。</p>
+                    <div class="w-full h-[2px] bg-bone/20 relative"><div class="absolute top-0 left-0 h-full w-0 bg-vermillion transition-all duration-500 group-hover:w-full"></div></div>
+                </div>
+                <div class="feature-card group pt-8 border-t border-bone/10 md:translate-y-24">
+                    <h3 class="font-syne text-xl font-bold text-bone group-hover:text-vermillion mb-4 uppercase tracking-widest leading-snug">THANKS</h3>
+                    <p class="font-chinese text-sm text-bone/60 leading-relaxed mb-12">感谢你的驻足与探索。 在这个信息飞快又碎片化的时代，你能阅读至此，本身就是一种奇妙的共鸣。希望能为你带来一丝视觉上的愉悦或启发。</p>
+                    <div class="w-full h-[2px] bg-bone/20 relative"><div class="absolute top-0 left-0 h-full w-0 bg-vermillion transition-all duration-500 group-hover:w-full"></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-vermillion py-10 overflow-hidden relative">
+        <div class="w-full flex whitespace-nowrap overflow-hidden py-10" id="footer-ticker">
+            <h1 class="font-syne font-extrabold text-abyss text-[15vw] leading-none uppercase flex-shrink-0">R6 STUDIO — DAIZEHAO — R6 STUDIO — </h1>
+            <h1 class="font-syne font-extrabold text-abyss text-[15vw] leading-none uppercase flex-shrink-0">R6 STUDIO — DAIZEHAO — R6 STUDIO — </h1>
+        </div>
+        <div class="absolute bottom-4 left-6 text-abyss font-mono text-[10px] font-bold uppercase tracking-tighter">© 2026 // VISUAL & INTERACTIVE ARCHITECTURE // DAI ZEHAO</div>
+    </footer>
+
+    <!-- 全屏灯箱 (Lightbox) -->
+    <div id="gallery-lightbox" class="fixed inset-0 z-[9000] bg-abyss/95 backdrop-blur-md flex items-center justify-center opacity-0 pointer-events-none transition-all duration-500">
+        <div class="absolute inset-0 cursor-pointer hover-trigger" id="lightbox-bg"></div>
+        <img id="lightbox-img" src="" class="max-w-[85vw] max-h-[85vh] object-contain rounded-md shadow-2xl scale-95 transition-transform duration-500 relative z-10 pointer-events-none">
+        <button id="lightbox-close" class="absolute top-8 right-8 text-bone font-syne text-xl tracking-widest uppercase hover:text-vermillion transition-colors z-20 hover-trigger cursor-pointer">CLOSE [X]</button>
+    </div>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger, TextPlugin);
+
+        const cursorDot = document.getElementById('cursor-dot'), cursorOutline = document.getElementById('cursor-outline');
+        let mX = 0, mY = 0, dX = 0, dY = 0, oX = 0, oY = 0;
+
+        window.addEventListener('mousemove', (e) => { mX = e.clientX; mY = e.clientY; });
+        gsap.ticker.add(() => {
+            dX += (mX - dX) * 0.2; dY += (mY - dY) * 0.2;
+            gsap.set(cursorDot, { x: dX, y: dY });
+            oX += (mX - oX) * 0.15; oY += (mY - oY) * 0.15;
+            gsap.set(cursorOutline, { x: oX, y: oY });
+
+            const titleD = document.getElementById('title-designer'), nameEn = document.getElementById('name-en'), nameZh = document.getElementById('name-zh'), nameR6 = document.getElementById('name-r6'), nameGroup = document.getElementById('name-group');
+            if (titleD) { const r = titleD.getBoundingClientRect(); titleD.style.setProperty('--mx-d', `${oX - r.left}px`); titleD.style.setProperty('--my-d', `${oY - r.top}px`); }
+            if (nameEn && !nameGroup.classList.contains('state-zh-active')) { const r = nameEn.getBoundingClientRect(); nameEn.style.setProperty('--mx', `${mX - r.left}px`); nameEn.style.setProperty('--my', `${mY - r.top}px`); }
+            if (nameZh && nameGroup.classList.contains('state-zh-active')) { const r = nameZh.getBoundingClientRect(); nameZh.style.setProperty('--mx-zh', `${mX - r.left}px`); nameZh.style.setProperty('--my-zh', `${mY - r.top}px`); }
+            if (nameR6) { const r = nameR6.getBoundingClientRect(); nameR6.style.setProperty('--mx-r6', `${mX - r.left}px`); nameR6.style.setProperty('--my-r6', `${mY - r.top}px`); }
+        });
+
+        document.querySelectorAll('.hover-trigger').forEach(el => {
+            el.addEventListener('mouseenter', () => { document.body.classList.add('cursor-hover'); document.getElementById('title-designer')?.style.setProperty('--c-rad', '30px'); });
+            el.addEventListener('mouseleave', () => { document.body.classList.remove('cursor-hover'); document.getElementById('title-designer')?.style.setProperty('--c-rad', '20px'); });
+        });
+
+        const zhTrigger = document.getElementById('zh-trigger'), enTriggers = document.querySelectorAll('.en-trigger'), nameGroup = document.getElementById('name-group');
+        if (zhTrigger && enTriggers.length > 0) {
+            zhTrigger.addEventListener('mouseenter', () => nameGroup.classList.add('state-zh-active'));
+            enTriggers.forEach(t => t.addEventListener('mouseenter', () => nameGroup.classList.remove('state-zh-active')));
+        }
+
+        const mm = gsap.matchMedia();
+        mm.add("(min-width: 768px)", () => {
+            const sub = document.querySelector('.hero-sub'); gsap.set(sub, { text: "" });
+            gsap.timeline().to(sub, { text: sub.getAttribute('data-text'), duration: 1.2, delay: 0.5 }).from(".hero-title-line", { yPercent: 100, opacity: 0, duration: 1, stagger: 0.1, ease: "power4.out" }, "-=0.6");
+
+            const gallery = document.getElementById("seq1-gallery");
+            const cine1 = gsap.timeline({ scrollTrigger: { trigger: "#cinematic-media", start: "top top", end: "+=4000", scrub: true, pin: true }});
+            cine1.to(["#vf-1", "#vf-2", "#vf-3", "#vf-4", "#lens-ring", "#timeline-track"], { strokeDashoffset: 0, duration: 1 }, 0)
+                 .to("#aperture-group", { rotation: 180, scale: 0.5, transformOrigin: "500px 400px", duration: 1 }, 0)
+                 .to(["#rec-dot", "#rec-text"], { opacity: 1, duration: 0.1, repeat: 10, yoyo: true }, 0);
+            cine1.to(gallery, { x: () => -(gallery.scrollWidth - window.innerWidth), ease: "none", duration: 1 }, 0);
+            const items = gsap.utils.toArray('.gallery-item');
+            items.forEach(item => {
+                const img = item.querySelector('.gallery-img');
+                const text = item.querySelector('.gallery-text-overlay');
+                const tlImg = gsap.timeline({ scrollTrigger: { trigger: item, containerAnimation: cine1, start: "center center+=30%", end: "center center-=30%", scrub: true }});
+                tlImg.to(img, { filter: "grayscale(0%) brightness(0.8)", scale: 1, duration: 1, ease: "power1.out" }).to(img, { filter: "grayscale(100%) brightness(0.15)", scale: 0.96, duration: 1, ease: "power1.in" });
+                const tlText = gsap.timeline({ scrollTrigger: { trigger: item, containerAnimation: cine1, start: "center center+=25%", end: "center center-=25%", scrub: true }});
+                tlText.to(text, { opacity: 1, y: 0, duration: 1, ease: "power1.out" }).to(text, { opacity: 0, y: 20, duration: 1, ease: "power1.in" });
+            });
+
+            const cine2 = gsap.timeline({ scrollTrigger: { trigger: "#cinematic-easing", start: "top top", end: "+=2500", scrub: 1, pin: true }});
+            cine2.to("#easing-path", { strokeDashoffset: 0, duration: 2 }, "s")
+                 .to(".endpoint-2", { scale: 1, duration: 0.5, stagger: 0.2 }, "s")
+                 .to("#easing-path", { attr: { d: "M 200 600 C 300 150, 700 650, 800 200" }, duration: 4 }, "m")
+                 .to("#handle-line-1", { attr: { x2: 300, y2: 150 }, duration: 4 }, "m")
+                 .to("#handle-line-2", { attr: { x2: 700, y2: 650 }, duration: 4 }, "m")
+                 .to(".label-2", { opacity: 1, y: -20, duration: 1.5, stagger: 0.6 }, "m+=1.5");
+
+            const cine3 = gsap.timeline({ scrollTrigger: { trigger: "#cinematic-core", start: "top top", end: "+=3500", scrub: 1, pin: true }});
+            cine3.to(".core-bg-wrapper", { opacity: 0.4, duration: 2, stagger: 0.1 }, "start");
+            gsap.utils.toArray('.core-bg-wrapper').forEach((wrapper) => {
+                const moveVw = parseFloat(wrapper.getAttribute('data-move-vw')) || 0;
+                cine3.to(wrapper, { x: moveVw + "vw", duration: 12, ease: "none" }, "start");
+            });
+
+            cine3.to("#core-ring-1", { strokeDashoffset: 0, duration: 3, ease: "power2.inOut" }, "start")
+                 .to("#core-ring-2", { strokeDashoffset: 0, duration: 3, ease: "power2.inOut" }, "start+=0.5")
+                 .to("#core-crosshairs", { opacity: 1, rotation: 180, transformOrigin: "500px 400px", duration: 4 }, "start")
+                 .fromTo("#core-avatar-group", { scale: 0, opacity: 0, transformOrigin: "500px 400px" }, { opacity: 1, scale: 1, duration: 1.5, ease: "back.out(1.7)" }, "start+=1")
+                 .to("#core-pulse", { opacity: 0.5, attr: { r: 80 }, duration: 2, repeat: 2, yoyo: true }, "start+=1.5")
+                 .to("#path-orbit", { strokeDashoffset: 0, duration: 4 }, "start+=1.5")
+                 .to("#orbit-sat-1", { rotation: 360, transformOrigin: "500px 400px", duration: 12, ease: "none" }, "start+=1.5")
+                 .to("#orbit-sat-2", { rotation: -360, transformOrigin: "500px 400px", duration: 12, ease: "none" }, "start+=1.5")
+                 .to(".node-line", { strokeDashoffset: 0, duration: 2, stagger: 0.3 }, "start+=2.5")
+                 .to(".node-dot", { opacity: 1, scale: 1.5, transformOrigin: "center center", duration: 0.5, stagger: 0.3 }, "start+=3")
+                 .to(".label-3", { opacity: 1, x: 10, duration: 1, stagger: 0.3 }, "start+=3.2");
+        });
+
+        const lightbox = document.getElementById('gallery-lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const closeLightbox = () => {
+            lightbox.classList.remove('opacity-100', 'pointer-events-auto');
+            lightbox.classList.add('opacity-0', 'pointer-events-none');
+            lightboxImg.classList.remove('scale-100');
+            lightboxImg.classList.add('scale-95');
+        };
+        
+        setTimeout(() => {
+            document.querySelectorAll('.core-bg-img').forEach(img => {
+                img.addEventListener('click', () => {
+                    lightboxImg.src = img.src;
+                    lightbox.classList.remove('opacity-0', 'pointer-events-none');
+                    lightbox.classList.add('opacity-100', 'pointer-events-auto');
+                    setTimeout(() => {
+                        lightboxImg.classList.remove('scale-95');
+                        lightboxImg.classList.add('scale-100');
+                    }, 50);
+                });
+            });
+        }, 500);
+
+        document.getElementById('lightbox-bg').addEventListener('click', closeLightbox);
+        document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+
+        gsap.to("#typewriter-dots", { text: "...?", duration: 1.5, repeat: -1, repeatDelay: 1, ease: "none" });
+        gsap.to("#footer-ticker h1", { xPercent: -100, ease: "none", duration: 25, repeat: -1 });
+    </script>
+</body>
+</html>
