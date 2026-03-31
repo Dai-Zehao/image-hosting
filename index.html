@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>戴泽浩 | R6 Studio 数字视觉架构</title>
+    <title>DAI ZEHAO-动态名片</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,7 +42,7 @@
         .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(232, 232, 227, 0.4); background: transparent; transition: width 0.2s, height 0.2s; }
         .cursor-hover .cursor-outline { width: 60px; height: 60px; border-color: #FF3B00; }
 
-        /* HERO INTERACTION ENGINE */
+        /* HERO INTERACTION ENGINE (默认电脑端悬浮) */
         #title-designer {
             font-size: clamp(3rem, 10vw, 110px); line-height: 0.8; transition: font-size 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease;
             transform-origin: left bottom; -webkit-text-stroke: 1px #E8E8E3; color: transparent; -webkit-background-clip: text; background-clip: text; background-repeat: no-repeat;
@@ -74,55 +74,47 @@
 
         /* 画廊系统 */
         .gallery-item { position: relative; z-index: 1; flex-shrink: 0; }
-        .gallery-img { 
-            filter: grayscale(100%) brightness(0.15); 
-            transform: scale(0.96);
-            will-change: filter, transform;
-        }
-        .gallery-text-overlay { 
-            position: absolute; 
-            z-index: 60; 
-            opacity: 0; 
-            transform: translateY(30px);
-            will-change: opacity, transform;
-        }
+        .gallery-img { filter: grayscale(100%) brightness(0.15); transform: scale(0.96); will-change: filter, transform; }
+        .gallery-text-overlay { position: absolute; z-index: 60; opacity: 0; transform: translateY(30px); will-change: opacity, transform; }
 
         /* 动画3 背景视差交互组 */
-        .core-bg-wrapper {
-            position: absolute;
-            opacity: 0;
-            will-change: transform, opacity;
-            z-index: 1; 
-            transition: z-index 0.3s;
-        }
-        .core-bg-wrapper:hover {
-            z-index: 50; 
-        }
-        .core-bg-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 6px;
-            filter: brightness(0.4) contrast(1.1); 
-            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-            cursor: pointer;
-            pointer-events: auto; 
-        }
-        .core-bg-wrapper:hover .core-bg-img {
-            filter: brightness(1) contrast(1.05); 
-            transform: scale(1.15) translateY(-5px); 
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255, 59, 0, 0.2); 
-        }
+        .core-bg-wrapper { position: absolute; opacity: 0; will-change: transform, opacity; z-index: 1; transition: z-index 0.3s; }
+        .core-bg-wrapper:hover { z-index: 50; }
+        .core-bg-img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; filter: brightness(0.4) contrast(1.1); transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1); cursor: pointer; pointer-events: auto; }
+        .core-bg-wrapper:hover .core-bg-img { filter: brightness(1) contrast(1.05); transform: scale(1.15) translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255, 59, 0, 0.2); }
 
         /* 通用 SVG 样式 */
         #cinematic-svg-container-1 svg, #cinematic-svg-container-2 svg, #cinematic-svg-container-3 svg { width: 100%; height: 100%; max-width: 1200px; overflow: visible; }
         .svg-line { fill: none; stroke: #FF3B00; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
         .svg-line-bg { fill: none; stroke: rgba(232, 232, 227, 0.1); stroke-width: 1; }
         .svg-fill-vermillion { fill: #FF3B00; }
-        .svg-text { font-family: 'Syne', 'PingFang SC', sans-serif; font-weight: 700; font-size: 20px; fill: #E8E8E3; opacity: 0; }
+        .svg-text { font-family: 'Syne', 'PingFang SC', sans-serif; font-weight: 700; fill: #E8E8E3; opacity: 1; }
+        .title-text { font-size: 28px; }
+        .desc-text { font-size: 18px; font-weight: 300; }
+        .label-3 { font-size: 20px; }
         
         .hero-sub::after { content: '_'; display: inline-block; margin-left: 4px; animation: blink 0.8s step-end infinite; }
         @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+        /* ================= 手机端终极适配 ================= */
+        @media (max-width: 767px) {
+            /* 1. 扫光特效替代 Hover (移除了第一行的扫光，使其保持静态亮色) */
+            #title-designer { background-image: none !important; color: #E8E8E3 !important; -webkit-text-fill-color: #E8E8E3 !important; }
+            #name-en { background-image: linear-gradient(120deg, transparent 0%, #FF3B00 20%, transparent 40%) !important; background-size: 200% auto !important; animation: sweepLight 4s linear infinite 0.5s !important; }
+            .name-group.state-zh-active #name-zh { background-image: linear-gradient(120deg, transparent 0%, #E8E8E3 20%, transparent 40%) !important; background-size: 200% auto !important; animation: sweepLight 4s linear infinite !important; }
+            #name-r6 { background-image: linear-gradient(120deg, #FF3B00 0%, #ffffff 20%, #FF3B00 40%) !important; background-size: 200% auto !important; animation: sweepLight 4s linear infinite 1.5s !important; }
+
+            /* 2. 动画 2/3 SVG 字体大放飞 */
+            .title-text { font-size: 42px !important; }
+            .desc-text { font-size: 26px !important; transform: translateY(16px); }
+            .label-3 { font-size: 28px !important; }
+            .node-dot { r: 5px !important; transform: translateX(-4px); }
+        }
+
+        @keyframes sweepLight {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
     </style>
 </head>
 <body class="selection:bg-vermillion selection:text-abyss relative">
@@ -131,7 +123,6 @@
     <div class="cursor-dot" id="cursor-dot"></div>
     <div class="cursor-outline" id="cursor-outline"></div>
 
-    <!-- 导航栏：采用 gcore 节点确保国内访问 -->
     <nav class="fixed top-0 left-0 w-full p-6 flex justify-between items-center z-50 mix-blend-difference text-bone pointer-events-none">
         <div class="hover-trigger flex items-center pointer-events-auto cursor-pointer">
             <img src="https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/logo.png" 
@@ -155,7 +146,7 @@
                             <div class="hero-title-line"><h2 id="name-en" class="font-syne font-extrabold tracking-tighter uppercase whitespace-nowrap pr-12 w-fit">DAI ZEHAO</h2></div>
                         </div>
                         <div id="zh-trigger" class="overflow-visible pb-1 cursor-pointer px-2 flex-shrink-0 z-30">
-                            <div class="hero-title-line"><h2 id="name-zh" data-text="戴泽浩" class="font-serifZh font-black tracking-tighter uppercase whitespace-nowrap hover-trigger py-4 pr-8 w-fit">戴泽浩</h2></div>
+                            <div class="hero-title-line"><h2 id="name-zh" data-text="泽浩" class="font-serifZh font-black tracking-tighter uppercase whitespace-nowrap hover-trigger py-4 pr-8 w-fit">泽浩</h2></div>
                         </div>
                     </div>
                 </div>
@@ -239,7 +230,7 @@
         </div>
     </section>
 
-    <!-- SECTION 2.2: EASING CURVE -->
+    <!-- SECTION 2.2: EASING CURVE (修复文字嵌套轴向) -->
     <section id="cinematic-easing" class="relative h-[100svh] w-full bg-abyss flex items-center justify-center overflow-hidden">
         <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 opacity-30 pointer-events-none">
             <source src="https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/hero-video.mp4" type="video/mp4">
@@ -259,17 +250,18 @@
                 <circle cx="800" cy="200" r="8" fill="#E8E8E3" class="endpoint-2 scale-0" />
                 
                 <g id="seq2-labels" class="pointer-events-none">
-                    <g transform="translate(120, 150)">
-                        <text x="0" y="0" class="svg-text label-2" opacity="0">
-                            <tspan font-family="'Syne'" font-weight="800" font-size="28">ARCHITECTURE</tspan>
-                            <tspan x="0" dy="30" font-family="'chinese'" font-weight="300" font-size="18">UI 开发架构设计</tspan>
-                        </text>
+                    <!-- 使用内外嵌套包裹结构，防止 GSAP 冲突并支持移动端字号独立放大 -->
+                    <g transform="translate(150, 150)">
+                        <g class="label-2" opacity="0">
+                            <text x="0" y="0" class="svg-text title-text">ARCHITECTURE</text>
+                            <text x="0" y="35" class="svg-text desc-text">UI 开发架构设计</text>
+                        </g>
                     </g>
-                    <g transform="translate(630, 680)">
-                        <text x="0" y="0" class="svg-text label-2" opacity="0">
-                            <tspan font-family="'Syne'" font-weight="800" font-size="28">INTERACTIVE</tspan>
-                            <tspan x="0" dy="30" font-family="'chinese'" font-weight="300" font-size="18">核心特效与动画</tspan>
-                        </text>
+                    <g transform="translate(550, 680)"> <!-- 原630向左调整，防手机被切 -->
+                        <g class="label-2" opacity="0">
+                            <text x="0" y="0" class="svg-text title-text">INTERACTIVE</text>
+                            <text x="0" y="35" class="svg-text desc-text">核心特效与动画</text>
+                        </g>
                     </g>
                 </g>
             </svg>
@@ -279,9 +271,7 @@
     <!-- SECTION 2.3: ARCHITECTURE CORE -->
     <section id="cinematic-core" class="relative h-[100svh] w-full bg-carbon flex items-center justify-center overflow-hidden">
         
-        <!-- 背景视察阵列容器 -->
         <div id="core-bg-gallery" class="absolute inset-0 w-full h-full pointer-events-none">
-            <!-- 自动生成阵列 -->
             <script>
                 const galleryContainer = document.querySelector('#core-bg-gallery');
                 const imagesCount = 14;
@@ -332,11 +322,7 @@
                 
                 <g id="core-avatar-group" opacity="0">
                     <circle cx="500" cy="400" r="40" class="svg-line" stroke-width="2" />
-                    <!-- 已将头像更新为 touxiang2.jpg -->
-                    <image x="460" y="360" width="80" height="80" 
-                           href="https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/touxiang2.jpg" 
-                           xlink:href="https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/touxiang2.jpg" 
-                           clip-path="url(#avatar-clip)" preserveAspectRatio="xMidYMid slice" />
+                    <image x="460" y="360" width="80" height="80" href="https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/touxiang2.jpg" xlink:href="https://gcore.jsdelivr.net/gh/dai-zehao/image-hosting@main/touxiang2.jpg" clip-path="url(#avatar-clip)" preserveAspectRatio="xMidYMid slice" />
                 </g>
                 
                 <path id="path-orbit" class="svg-line" d="M 500 175 A 225 225 0 1 1 499 175" stroke-dasharray="1500" stroke-dashoffset="1500" />
@@ -344,16 +330,16 @@
                 <circle cx="275" cy="400" r="6" class="svg-fill-bone" id="orbit-sat-2" />
 
                 <g id="core-lines">
-                    <line x1="500" y1="400" x2="720" y2="135" class="svg-line-bg node-line" stroke-dasharray="400" stroke-dashoffset="400" />
+                    <line x1="500" y1="400" x2="690" y2="135" class="svg-line-bg node-line" stroke-dasharray="400" stroke-dashoffset="400" />
                     <line x1="500" y1="400" x2="110" y2="635" class="svg-line-bg node-line" stroke-dasharray="600" stroke-dashoffset="600" />
-                    <line x1="500" y1="400" x2="40" y2="235" class="svg-line-bg node-line" stroke-dasharray="600" stroke-dashoffset="600" />
-                    <line x1="500" y1="400" x2="820" y2="525" class="svg-line-bg node-line" stroke-dasharray="400" stroke-dashoffset="400" />
+                    <line x1="500" y1="400" x2="60" y2="235" class="svg-line-bg node-line" stroke-dasharray="600" stroke-dashoffset="600" />
+                    <line x1="500" y1="400" x2="710" y2="525" class="svg-line-bg node-line" stroke-dasharray="400" stroke-dashoffset="400" />
                 </g>
 
-                <g transform="translate(730, 130)"><circle cx="-10" cy="6" r="3" class="svg-fill-vermillion node-dot" opacity="0"/><text x="0" y="10" class="svg-text label-3" opacity="0">省级奖项得主 (广东)</text></g>
-                <g transform="translate(100, 640)"><circle cx="-10" cy="6" r="3" class="svg-fill-vermillion node-dot" opacity="0"/><text x="0" y="10" class="svg-text label-3" opacity="0">壹图网签约摄影师</text></g>
-                <g transform="translate(25, 240)"><circle cx="-10" cy="6" r="3" class="svg-fill-bone node-dot" opacity="0"/><text x="0" y="10" class="svg-text label-3" opacity="0">图虫网签约供稿人</text></g>
-                <g transform="translate(830, 530)"><circle cx="-10" cy="6" r="3" class="svg-fill-bone node-dot" opacity="0"/><text x="0" y="10" class="svg-text label-3" opacity="0">全栈数字视觉输出</text></g>
+                <g transform="translate(700, 130)"><g class="label-3" opacity="0"><circle cx="-10" cy="-6" r="3" class="svg-fill-vermillion node-dot"/><text x="0" y="0" class="svg-text">省级奖项得主 (广东)</text></g></g>
+                <g transform="translate(100, 640)"><g class="label-3" opacity="0"><circle cx="-10" cy="-6" r="3" class="svg-fill-vermillion node-dot"/><text x="0" y="0" class="svg-text">壹图网签约摄影师</text></g></g>
+                <g transform="translate(50, 240)"><g class="label-3" opacity="0"><circle cx="-10" cy="-6" r="3" class="svg-fill-bone node-dot"/><text x="0" y="0" class="svg-text">图虫网签约供稿人</text></g></g>
+                <g transform="translate(720, 530)"><g class="label-3" opacity="0"><circle cx="-10" cy="-6" r="3" class="svg-fill-bone node-dot"/><text x="0" y="0" class="svg-text">全栈数字视觉输出</text></g></g>
             </svg>
         </div>
     </section>
@@ -404,6 +390,7 @@
     <script>
         gsap.registerPlugin(ScrollTrigger, TextPlugin);
 
+        // 1. 光标追踪驱动
         const cursorDot = document.getElementById('cursor-dot'), cursorOutline = document.getElementById('cursor-outline');
         let mX = 0, mY = 0, dX = 0, dY = 0, oX = 0, oY = 0;
 
@@ -426,17 +413,31 @@
             el.addEventListener('mouseleave', () => { document.body.classList.remove('cursor-hover'); document.getElementById('title-designer')?.style.setProperty('--c-rad', '20px'); });
         });
 
+        // ================= 手机端中英切换 (Click 触发) =================
         const zhTrigger = document.getElementById('zh-trigger'), enTriggers = document.querySelectorAll('.en-trigger'), nameGroup = document.getElementById('name-group');
-        if (zhTrigger && enTriggers.length > 0) {
-            zhTrigger.addEventListener('mouseenter', () => nameGroup.classList.add('state-zh-active'));
-            enTriggers.forEach(t => t.addEventListener('mouseenter', () => nameGroup.classList.remove('state-zh-active')));
+        const showZh = () => nameGroup.classList.add('state-zh-active');
+        const hideZh = () => nameGroup.classList.remove('state-zh-active');
+        
+        if (zhTrigger) {
+            zhTrigger.addEventListener('mouseenter', showZh);
+            zhTrigger.addEventListener('click', showZh); // 添加了点击交互
+        }
+        if (enTriggers.length > 0) {
+            enTriggers.forEach(t => {
+                t.addEventListener('mouseenter', hideZh);
+                t.addEventListener('click', hideZh); // 添加了点击交互
+            });
         }
 
+        // 2. 媒体查询架构 GSAP 动画 (彻底分离电脑端与手机端)
         const mm = gsap.matchMedia();
+
+        // =================== 桌面端电脑体验 (保持完美体验) ===================
         mm.add("(min-width: 768px)", () => {
             const sub = document.querySelector('.hero-sub'); gsap.set(sub, { text: "" });
             gsap.timeline().to(sub, { text: sub.getAttribute('data-text'), duration: 1.2, delay: 0.5 }).from(".hero-title-line", { yPercent: 100, opacity: 0, duration: 1, stagger: 0.1, ease: "power4.out" }, "-=0.6");
 
+            // SEQ 01
             const gallery = document.getElementById("seq1-gallery");
             const cine1 = gsap.timeline({ scrollTrigger: { trigger: "#cinematic-media", start: "top top", end: "+=4000", scrub: true, pin: true }});
             cine1.to(["#vf-1", "#vf-2", "#vf-3", "#vf-4", "#lens-ring", "#timeline-track"], { strokeDashoffset: 0, duration: 1 }, 0)
@@ -453,6 +454,7 @@
                 tlText.to(text, { opacity: 1, y: 0, duration: 1, ease: "power1.out" }).to(text, { opacity: 0, y: 20, duration: 1, ease: "power1.in" });
             });
 
+            // SEQ 02
             const cine2 = gsap.timeline({ scrollTrigger: { trigger: "#cinematic-easing", start: "top top", end: "+=2500", scrub: 1, pin: true }});
             cine2.to("#easing-path", { strokeDashoffset: 0, duration: 2 }, "s")
                  .to(".endpoint-2", { scale: 1, duration: 0.5, stagger: 0.2 }, "s")
@@ -461,6 +463,7 @@
                  .to("#handle-line-2", { attr: { x2: 700, y2: 650 }, duration: 4 }, "m")
                  .to(".label-2", { opacity: 1, y: -20, duration: 1.5, stagger: 0.6 }, "m+=1.5");
 
+            // SEQ 03
             const cine3 = gsap.timeline({ scrollTrigger: { trigger: "#cinematic-core", start: "top top", end: "+=3500", scrub: 1, pin: true }});
             cine3.to(".core-bg-wrapper", { opacity: 0.4, duration: 2, stagger: 0.1 }, "start");
             gsap.utils.toArray('.core-bg-wrapper').forEach((wrapper) => {
@@ -481,6 +484,62 @@
                  .to(".label-3", { opacity: 1, x: 10, duration: 1, stagger: 0.3 }, "start+=3.2");
         });
 
+
+        // =================== 手机端单独适配 (专门缩短滚动距离以提速) ===================
+        mm.add("(max-width: 767px)", () => {
+            const sub = document.querySelector('.hero-sub'); gsap.set(sub, { text: "" });
+            gsap.timeline().to(sub, { text: sub.getAttribute('data-text'), duration: 1.2, delay: 0.2 }).from(".hero-title-line", { yPercent: 100, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power4.out" }, "-=0.6");
+
+            // SEQ 01 手机端 (削减端点值, 避免长草期)
+            const gallery = document.getElementById("seq1-gallery");
+            const cine1 = gsap.timeline({ scrollTrigger: { trigger: "#cinematic-media", start: "top top", end: "+=1500", scrub: true, pin: true }});
+            cine1.to(["#vf-1", "#vf-2", "#vf-3", "#vf-4", "#lens-ring", "#timeline-track"], { strokeDashoffset: 0, duration: 1 }, 0)
+                 .to("#aperture-group", { rotation: 180, scale: 0.5, transformOrigin: "500px 400px", duration: 1 }, 0)
+                 .to(["#rec-dot", "#rec-text"], { opacity: 1, duration: 0.1, repeat: 10, yoyo: true }, 0);
+            cine1.to(gallery, { x: () => -(gallery.scrollWidth - window.innerWidth), ease: "none", duration: 1 }, 0);
+            
+            const items = gsap.utils.toArray('.gallery-item');
+            items.forEach(item => {
+                const img = item.querySelector('.gallery-img');
+                const text = item.querySelector('.gallery-text-overlay');
+                const tlImg = gsap.timeline({ scrollTrigger: { trigger: item, containerAnimation: cine1, start: "center center+=40%", end: "center center-=40%", scrub: true }});
+                tlImg.to(img, { filter: "grayscale(0%) brightness(0.8)", scale: 1, duration: 1 }).to(img, { filter: "grayscale(100%) brightness(0.15)", scale: 0.96, duration: 1 });
+                const tlText = gsap.timeline({ scrollTrigger: { trigger: item, containerAnimation: cine1, start: "center center+=30%", end: "center center-=30%", scrub: true }});
+                tlText.to(text, { opacity: 1, y: 0, duration: 1 }).to(text, { opacity: 0, y: 20, duration: 1 });
+            });
+
+            // SEQ 02 手机端
+            const cine2 = gsap.timeline({ scrollTrigger: { trigger: "#cinematic-easing", start: "top top", end: "+=1200", scrub: 1, pin: true }});
+            cine2.to("#easing-path", { strokeDashoffset: 0, duration: 2 }, "s")
+                 .to(".endpoint-2", { scale: 1, duration: 0.5, stagger: 0.2 }, "s")
+                 .to("#easing-path", { attr: { d: "M 200 600 C 300 150, 700 650, 800 200" }, duration: 4 }, "m")
+                 .to("#handle-line-1", { attr: { x2: 300, y2: 150 }, duration: 4 }, "m")
+                 .to("#handle-line-2", { attr: { x2: 700, y2: 650 }, duration: 4 }, "m")
+                 .to(".label-2", { opacity: 1, y: -20, duration: 1.5, stagger: 0.6 }, "m+=1.5");
+
+            // SEQ 03 手机端
+            const cine3 = gsap.timeline({ scrollTrigger: { trigger: "#cinematic-core", start: "top top", end: "+=2000", scrub: 1, pin: true }});
+            cine3.to(".core-bg-wrapper", { opacity: 0.4, duration: 2, stagger: 0.1 }, "start");
+            gsap.utils.toArray('.core-bg-wrapper').forEach((wrapper) => {
+                const moveVw = parseFloat(wrapper.getAttribute('data-move-vw')) || 0;
+                cine3.to(wrapper, { x: (moveVw * 0.5) + "vw", duration: 12, ease: "none" }, "start");
+            });
+
+            cine3.to("#core-ring-1", { strokeDashoffset: 0, duration: 3, ease: "power2.inOut" }, "start")
+                 .to("#core-ring-2", { strokeDashoffset: 0, duration: 3, ease: "power2.inOut" }, "start+=0.5")
+                 .to("#core-crosshairs", { opacity: 1, rotation: 180, transformOrigin: "500px 400px", duration: 4 }, "start")
+                 .fromTo("#core-avatar-group", { scale: 0, opacity: 0, transformOrigin: "500px 400px" }, { opacity: 1, scale: 1, duration: 1.5, ease: "back.out(1.7)" }, "start+=1")
+                 .to("#core-pulse", { opacity: 0.5, attr: { r: 80 }, duration: 2, repeat: 2, yoyo: true }, "start+=1.5")
+                 .to("#path-orbit", { strokeDashoffset: 0, duration: 4 }, "start+=1.5")
+                 .to("#orbit-sat-1", { rotation: 360, transformOrigin: "500px 400px", duration: 12, ease: "none" }, "start+=1.5")
+                 .to("#orbit-sat-2", { rotation: -360, transformOrigin: "500px 400px", duration: 12, ease: "none" }, "start+=1.5")
+                 .to(".node-line", { strokeDashoffset: 0, duration: 2, stagger: 0.3 }, "start+=2.5")
+                 .to(".node-dot", { opacity: 1, scale: 1.5, transformOrigin: "center center", duration: 0.5, stagger: 0.3 }, "start+=3")
+                 .to(".label-3", { opacity: 1, x: 10, duration: 1, stagger: 0.3 }, "start+=3.2");
+        });
+
+
+        // 3. 灯箱画廊交互逻辑 (Lightbox)
         const lightbox = document.getElementById('gallery-lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
         const closeLightbox = () => {
@@ -490,10 +549,11 @@
             lightboxImg.classList.add('scale-95');
         };
         
+        // 延迟绑定点击事件
         setTimeout(() => {
             document.querySelectorAll('.core-bg-img').forEach(img => {
                 img.addEventListener('click', () => {
-                    lightboxImg.src = img.src;
+                    lightboxImg.src = img.src; 
                     lightbox.classList.remove('opacity-0', 'pointer-events-none');
                     lightbox.classList.add('opacity-100', 'pointer-events-auto');
                     setTimeout(() => {
@@ -507,6 +567,7 @@
         document.getElementById('lightbox-bg').addEventListener('click', closeLightbox);
         document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
 
+        // 打字机循环与底部无限滚动
         gsap.to("#typewriter-dots", { text: "...?", duration: 1.5, repeat: -1, repeatDelay: 1, ease: "none" });
         gsap.to("#footer-ticker h1", { xPercent: -100, ease: "none", duration: 25, repeat: -1 });
     </script>
