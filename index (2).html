@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>给凝凝的专属惊喜 💖</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入浪漫中文字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        love: {
+                            50: '#fdf2f8',
+                            100: '#fce7f3',
+                            200: '#fbcfe8',
+                            300: '#f9a8d4',
+                            400: '#f472b6',
+                            500: '#ec4899',
+                            600: '#db2777',
+                        }
+                    },
+                    fontFamily: {
+                        'cute': ['"ZCOOL KuaiLe"', 'cursive', 'sans-serif'],
+                    },
+                    animation: {
+                        'bounce-slow': 'bounce 3s infinite',
+                        'float': 'float 6s linear infinite',
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%': { transform: 'translateY(100vh) scale(0.5)', opacity: 0 },
+                            '10%': { opacity: 1 },
+                            '90%': { opacity: 1 },
+                            '100%': { transform: 'translateY(-10vh) scale(1.2)', opacity: 0 },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            overflow: hidden;
+            touch-action: manipulation; /* 防止移动端双击缩放 */
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+        }
+        
+        /* 自定义隐藏滚动条 */
+        ::-webkit-scrollbar { display: none; }
+        
+        .heart-bg {
+            position: absolute;
+            font-size: 1.5rem;
+            color: rgba(236, 72, 153, 0.3);
+            z-index: 0;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .kiss-particle {
+            position: fixed;
+            font-size: 2.5rem;
+            pointer-events: none;
+            z-index: 100;
+            animation: explode 1.5s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% { transform: translate(0, 0) scale(0.5); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(1.5) rotate(var(--rot)); opacity: 0; }
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 8px 32px 0 rgba(236, 72, 153, 0.2);
+            overflow: hidden; /* 防止内部飞出的元素超出卡片 */
+        }
+
+        /* 新增：平滑逃跑动画 */
+        .smooth-runaway {
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            position: absolute;
+            will-change: transform;
+        }
+
+        /* 新增：自定义浪漫滑块 */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 32px;
+            width: 32px;
+            border-radius: 50%;
+            background: #ec4899;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(236, 72, 153, 0.6);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        input[type=range]::-webkit-slider-thumb:hover,
+        input[type=range]::-webkit-slider-thumb:active {
+            transform: scale(1.3);
+            background: #db2777;
+        }
+        input[type=range]::-moz-range-thumb {
+            height: 32px;
+            width: 32px;
+            border-radius: 50%;
+            background: #ec4899;
+            cursor: pointer;
+            border: none;
+        }
+        
+        .stage-enter {
+            animation: fadeInScale 0.5s ease-out forwards;
+        }
+        
+        @keyframes fadeInScale {
+            0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen w-full flex items-center justify-center font-cute text-gray-800 relative">
+
+    <!-- 动态背景层 -->
+    <div id="background-container" class="absolute inset-0 overflow-hidden pointer-events-none z-0"></div>
+
+    <!-- 主体内容卡片 -->
+    <div id="app" class="glass-card w-11/12 max-w-md rounded-3xl p-8 z-10 text-center relative stage-enter">
+        <!-- 动态内容渲染区 -->
+    </div>
+
+    <!-- 交互提示弹窗 -->
+    <div id="toast" class="fixed top-10 left-1/2 transform -translate-x-1/2 bg-love-500 text-white px-6 py-3 rounded-full shadow-lg z-50 opacity-0 transition-opacity duration-300 pointer-events-none font-bold text-lg">
+        提示信息
+    </div>
+
+    <script>
+        /**
+         * 核心游戏逻辑与渲染系统
+         * 包含错误捕获、DOM安全操作与高级交互
+         */
+
+        // 安全的DOM获取
+        const getEl = (id) => document.getElementById(id);
+        const app = getEl('app');
+        const bgContainer = getEl('background-container');
+        const toastEl = getEl('toast');
+
+        // 状态管理
+        let currentStageIndex = 0;
+
+        // 生成漂浮的背景爱心
+        function createBackgroundHearts() {
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.innerHTML = ['❤️', '💖', '💕', '✨', '🌸'][Math.floor(Math.random() * 5)];
+                heart.className = 'heart-bg animate-float';
+                heart.style.left = `${Math.random() * 100}vw`;
+                heart.style.animationDuration = `${5 + Math.random() * 5}s`;
+                heart.style.opacity = Math.random() * 0.5 + 0.2;
+                bgContainer.appendChild(heart);
+                
+                // 自动清理DOM
+                setTimeout(() => {
+                    if (heart.parentNode) heart.parentNode.removeChild(heart);
+                }, 10000);
+            }, 300);
+        }
+
+        // 提示信息系统
+        function showToast(message, duration = 2000) {
+            toastEl.innerText = message;
+            toastEl.style.opacity = '1';
+            toastEl.style.transform = 'translate(-50%, 0) scale(1.1)';
+            setTimeout(() => {
+                toastEl.style.opacity = '0';
+                toastEl.style.transform = 'translate(-50%, -20px) scale(1)';
+            }, duration);
+        }
+
+        // 终极爆破特效 (彩蛋)
+        function triggerKissExplosion() {
+            const emojis = ['💋', '❤️', '😘', '🥰', '💖'];
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            for (let i = 0; i < 80; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'kiss-particle';
+                    particle.innerText = emojis[Math.floor(Math.random() * emojis.length)];
+                    
+                    // 随机爆炸方向和距离
+                    const angle = Math.random() * Math.PI * 2;
+                    const distance = 100 + Math.random() * 300;
+                    const tx = Math.cos(angle) * distance;
+                    const ty = Math.sin(angle) * distance;
+                    const rot = Math.random() * 360;
+
+                    particle.style.setProperty('--tx', `${tx}px`);
+                    particle.style.setProperty('--ty', `${ty}px`);
+                    particle.style.setProperty('--rot', `${rot}deg`);
+                    
+                    particle.style.left = `${centerX}px`;
+                    particle.style.top = `${centerY}px`;
+                    
+                    document.body.appendChild(particle);
+
+                    setTimeout(() => {
+                        if (particle.parentNode) particle.parentNode.removeChild(particle);
+                    }, 1500);
+                }, i * 20); // 错开生成时间，形成连续爆炸感
+            }
+        }
+
+        // --- 新增：框内丝滑逃跑算法 ---
+        function makeSmoothDodge(btnId) {
+            const btn = getEl(btnId);
+            if (!btn) return;
+
+            btn.classList.add('smooth-runaway');
+            
+            // 初始在底部居中
+            btn.style.left = '0px';
+            btn.style.top = '0px';
+            let currentX = app.offsetWidth / 2 - btn.offsetWidth / 2 - 20; // 居中偏移
+            let currentY = 100; // 靠下
+            btn.style.transform = `translate(${currentX}px, ${currentY}px)`;
+
+            const dodge = (e) => {
+                if(e) e.preventDefault();
+                
+                // 获取父容器(即那个虚线框)的实际尺寸
+                const container = btn.parentElement;
+                const maxX = container.offsetWidth - btn.offsetWidth - 10;
+                const maxY = container.offsetHeight - btn.offsetHeight - 10;
+                
+                // 随机生成足够远的新位置
+                let newX, newY;
+                do {
+                    newX = 5 + Math.random() * maxX;
+                    newY = 5 + Math.random() * maxY;
+                } while (Math.abs(newX - currentX) < 50 && Math.abs(newY - currentY) < 50);
+
+                currentX = newX;
+                currentY = newY;
+                
+                // 使用 translate 实现丝滑移动和一点点俏皮的旋转
+                const randomRotate = Math.random() * 30 - 15;
+                btn.style.transform = `translate(${newX}px, ${newY}px) rotate(${randomRotate}deg)`;
+                
+                const texts = ['就不给点😜', '抓不到我~', '休想逃避！', '乖乖选上面那个'];
+                btn.innerText = texts[Math.floor(Math.random() * texts.length)];
+            };
+
+            // 使用 mouseenter 提前避让
+            btn.addEventListener('mouseenter', dodge);
+            btn.addEventListener('touchstart', dodge, {passive: false});
+            btn.addEventListener('click', dodge);
+        }
+
+        // --- 新增：霸道总裁强制输入法 ---
+        function setupMagicInput(inputId, displayId, nextBtnId) {
+            const input = getEl(inputId);
+            const display = getEl(displayId);
+            const nextBtn = getEl(nextBtnId);
+            if (!input || !display) return;
+
+            const targetText = "泽浩是凝凝的唯一，我最爱他啦！";
+            
+            input.addEventListener('input', () => {
+                let currentLen = input.value.length;
+                
+                if (currentLen > targetText.length) {
+                    input.value = input.value.substring(0, targetText.length);
+                    currentLen = targetText.length;
+                }
+                
+                const showText = targetText.substring(0, currentLen);
+                
+                if (currentLen > 0) {
+                    display.innerText = showText;
+                    display.classList.remove('text-gray-400');
+                    display.classList.add('text-love-600', 'font-bold');
+                } else {
+                    display.innerText = "点击这里开始输入...";
+                    display.classList.remove('text-love-600', 'font-bold');
+                    display.classList.add('text-gray-400');
+                }
+
+                if (currentLen >= targetText.length) {
+                    display.innerText = targetText + " 💖";
+                    display.classList.add('animate-pulse-fast', 'text-xl');
+                    nextBtn.classList.remove('hidden');
+                    nextBtn.classList.add('animate-bounce-slow');
+                    input.blur();
+                    showToast('觉悟很高嘛！奖励亲亲 😘');
+                }
+            });
+        }
+
+        // --- 新增：强制满分的叛逆滑块 ---
+        function setupRebelliousSlider(sliderId, textId, nextBtnId) {
+            const slider = getEl(sliderId);
+            const text = getEl(textId);
+            const nextBtn = getEl(nextBtnId);
+            if (!slider || !text) return;
+
+            const rebel = (e) => {
+                if (slider.value >= 1000) return; // 已经触发过了
+                
+                // 强制直接拉满
+                slider.value = 1000;
+                
+                // 视觉上的溢出和破坏效果
+                text.innerHTML = "100000000% !!<br><span class='text-sm mt-2 block'>满分溢出啦！太爱泽浩了！</span>";
+                text.classList.add('text-4xl', 'text-love-600', 'animate-bounce', 'font-bold');
+                
+                slider.classList.remove('bg-gray-200');
+                slider.classList.add('bg-love-400'); // 轨道变粉
+                
+                nextBtn.classList.remove('hidden');
+                showToast('这才乖嘛！😏');
+            };
+
+            slider.addEventListener('input', rebel);
+            slider.addEventListener('mousedown', rebel);
+            slider.addEventListener('touchstart', rebel, {passive: true});
+        }
+
+        // --- 新增：大礼包五选一强行全包 ---
+        function setupGiftMerge() {
+            const btns = document.querySelectorAll('.gift-btn');
+            const optionsContainer = getEl('gift-options');
+            const mergedGift = getEl('merged-gift');
+
+            btns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    btns.forEach(b => b.style.pointerEvents = 'none'); // 防止重复点击
+                    
+                    // 被点击的选项高亮放大
+                    btn.classList.remove('bg-white', 'text-love-600', 'border-love-300');
+                    btn.classList.add('bg-love-500', 'text-white', 'border-love-500', 'scale-105');
+                    
+                    // 其他选项缩小变淡
+                    btns.forEach(b => {
+                        if (b !== btn) {
+                            b.style.transform = 'scale(0.8)';
+                            b.style.opacity = '0.3';
+                            b.style.transition = 'all 0.5s ease';
+                        }
+                    });
+
+                    showToast('嘿嘿，选好啦？', 1200);
+
+                    // 延迟后触发“全都要”合体效果
+                    setTimeout(() => {
+                        optionsContainer.style.display = 'none';
+                        mergedGift.classList.remove('hidden');
+                        mergedGift.classList.add('flex', 'stage-enter');
+                        triggerKissExplosion(); // 爆个全屏特效
+                    }, 1500);
+                });
+            });
+        }
+
+        // 场景数据配置
+        const stages = [
+            {
+                id: 'intro',
+                render: () => `
+                    <div class="mb-6 animate-bounce-slow text-6xl">💌</div>
+                    <h1 class="text-3xl font-bold text-love-600 mb-4">凝凝专属心动测试</h1>
+                    <p class="text-gray-600 mb-8 text-lg">泽浩大魔王发来了一份神秘挑战，<br>里面全是套路，请小心作答！</p>
+                    <button onclick="nextStage()" class="w-full bg-love-500 hover:bg-love-600 text-white font-bold py-4 px-8 rounded-full shadow-lg transform transition hover:scale-105 active:scale-95 text-xl">
+                        接受挑战！开始 💕
+                    </button>
+                `
+            },
+            {
+                id: 'q1',
+                render: () => `
+                    <div class="mb-4 text-4xl">😘</div>
+                    <h2 class="text-2xl font-bold text-love-600 mb-6">第一关：要抱抱亲亲吗？</h2>
+                    <div class="relative w-full h-48 border-2 border-dashed border-love-200 rounded-xl bg-love-50/50 mb-4">
+                        <button onclick="showToast('太乖啦！马上抱抱亲亲举高高~ 😘'); setTimeout(nextStage, 1500)" class="absolute top-4 left-1/2 transform -translate-x-1/2 w-4/5 max-w-xs bg-white border-2 border-love-400 text-love-600 hover:bg-love-50 font-bold py-3 px-6 rounded-full shadow-md transition hover:scale-105 z-10 text-lg">
+                            抱抱亲亲举高高~😘
+                        </button>
+                        <button id="smooth-runaway-btn" class="w-3/4 max-w-xs bg-gray-200 text-gray-600 font-bold py-3 px-6 rounded-full shadow-md z-20 cursor-not-allowed">
+                            才不要亲亲 🙅‍♀️
+                        </button>
+                    </div>
+                    <p class="text-xs text-gray-400 animate-pulse">提示：试着去摸一下灰色的按钮...</p>
+                `,
+                afterRender: () => makeSmoothDodge('smooth-runaway-btn')
+            },
+            {
+                id: 'q2',
+                render: () => `
+                    <div class="mb-4 text-4xl">⌨️</div>
+                    <h2 class="text-2xl font-bold text-love-600 mb-4">第二关：真心话大考验</h2>
+                    <p class="text-gray-600 mb-4 text-sm">请在下方打字，用一句话形容泽浩：</p>
+                    
+                    <div class="relative w-full mb-6 text-left">
+                        <!-- 真实的输入框，但是文字透明，只显示光标 -->
+                        <input type="text" id="magic-input" class="w-full min-h-[80px] bg-white border-2 border-love-300 rounded-xl p-4 text-transparent caret-love-500 shadow-inner focus:outline-none focus:border-love-500 transition-colors" placeholder=" ">
+                        <!-- 伪造的显示层，覆盖在上面展示我们强制修改的文字 -->
+                        <div id="magic-display" class="absolute top-0 left-0 w-full h-full p-4 pointer-events-none text-gray-400 flex items-center justify-start whitespace-pre-wrap break-all transition-all">
+                            点击这里开始输入...
+                        </div>
+                    </div>
+
+                    <button id="magic-next-btn" onclick="nextStage()" class="hidden w-full bg-love-500 hover:bg-love-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition transform text-lg mt-2">
+                        发送给泽浩 💌
+                    </button>
+                `,
+                afterRender: () => setupMagicInput('magic-input', 'magic-display', 'magic-next-btn')
+            },
+            {
+                id: 'q3',
+                render: () => `
+                    <div class="mb-4 text-4xl">📈</div>
+                    <h2 class="text-2xl font-bold text-love-600 mb-6">第三关：爱意测试仪</h2>
+                    <p class="text-gray-600 mb-8 text-md">你现在对泽浩的爱有多少？拖动滑块试试！</p>
+                    
+                    <div class="w-full px-2 mb-8 relative">
+                        <div class="flex justify-between text-xs text-gray-400 mb-4 font-bold">
+                            <span>一点点</span>
+                            <span>超级多</span>
+                        </div>
+                        <input type="range" id="rebellious-slider" min="0" max="1000" value="0" class="w-full h-4 bg-gray-200 rounded-full appearance-none outline-none transition-colors duration-300 relative z-10 touch-pan-x">
+                        
+                        <div id="slider-value-text" class="mt-8 text-xl text-gray-400 transition-all duration-300 font-bold h-16 flex flex-col justify-center">
+                            0%
+                        </div>
+                    </div>
+
+                    <button id="slider-next-btn" onclick="nextStage()" class="hidden w-full bg-love-500 hover:bg-love-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transition transform text-lg mt-2">
+                        满分通关！前往最终惊喜 🎉
+                    </button>
+                `,
+                afterRender: () => setupRebelliousSlider('rebellious-slider', 'slider-value-text', 'slider-next-btn')
+            },
+            {
+                id: 'finale',
+                render: () => `
+                    <div class="mb-4 text-5xl animate-bounce">🎁</div>
+                    <h2 class="text-2xl font-bold text-love-600 mb-2">终极大礼包：五选一</h2>
+                    <p class="text-gray-600 mb-6 text-sm">恭喜凝凝通关！请挑选你的专属奖励：</p>
+                    
+                    <div id="gift-options" class="flex flex-col gap-3 mb-2">
+                        <button class="gift-btn w-full bg-white border-2 border-love-300 text-love-600 font-bold py-3 px-4 rounded-xl shadow-sm transition duration-300">💋 狂野亲亲</button>
+                        <button class="gift-btn w-full bg-white border-2 border-love-300 text-love-600 font-bold py-3 px-4 rounded-xl shadow-sm transition duration-300">🫂 温暖抱抱</button>
+                        <button class="gift-btn w-full bg-white border-2 border-love-300 text-love-600 font-bold py-3 px-4 rounded-xl shadow-sm transition duration-300">🧋 续命奶茶</button>
+                        <button class="gift-btn w-full bg-white border-2 border-love-300 text-love-600 font-bold py-3 px-4 rounded-xl shadow-sm transition duration-300">🥩 豪华大餐</button>
+                        <button class="gift-btn w-full bg-white border-2 border-love-300 text-love-600 font-bold py-3 px-4 rounded-xl shadow-sm transition duration-300">✈️ 泽浩飞来见你</button>
+                    </div>
+
+                    <div id="merged-gift" class="hidden flex-col items-center justify-center py-6">
+                        <h3 class="text-2xl font-bold text-love-600 mb-4 tracking-wider">傻瓜！<br>小孩子才做选择！</h3>
+                        <p class="text-lg text-love-500 font-bold mb-6">亲亲、抱抱、奶茶、大餐...<br>还有泽浩本人，全部打包送给你！</p>
+                        <button onclick="nextStage()" class="w-full bg-love-500 hover:bg-love-600 text-white font-bold py-4 px-6 rounded-full shadow-lg transition transform hover:scale-105 active:scale-95 text-xl animate-pulse-fast">
+                            接收全部爱意 💌
+                        </button>
+                    </div>
+                `,
+                afterRender: () => setupGiftMerge()
+            },
+            {
+                id: 'result',
+                render: () => `
+                    <div class="mb-6 text-6xl">🥰</div>
+                    <h1 class="text-4xl font-bold text-love-600 mb-4 tracking-wider">泽浩超级无敌爱你！</h1>
+                    <div class="bg-love-50 p-6 rounded-2xl border-2 border-love-200 mb-6">
+                        <p class="text-xl text-love-600 leading-relaxed">
+                            凝凝宝贝，<br>
+                            不论你在哪里，在做什么，<br>
+                            都要记得有个叫泽浩的大笨蛋<br>
+                            在深深地爱着你！<br>
+                            <span class="text-2xl mt-2 block">啵啵啵！💋💋💋</span>
+                        </p>
+                    </div>
+                    <button onclick="currentStageIndex=0; renderCurrentStage();" class="mt-4 text-love-400 underline hover:text-love-600">
+                        再被整蛊一次 😂
+                    </button>
+                `
+            }
+        ];
+
+        // 渲染器引擎
+        function renderCurrentStage() {
+            try {
+                // 添加退场动画
+                app.classList.remove('stage-enter');
+                void app.offsetWidth; // 触发重绘
+                
+                const stage = stages[currentStageIndex];
+                if (!stage) return;
+
+                app.innerHTML = stage.render();
+                app.classList.add('stage-enter');
+
+                // 执行关卡特定逻辑
+                if (typeof stage.afterRender === 'function') {
+                    // 稍微延迟确保DOM已完全挂载
+                    setTimeout(stage.afterRender, 50); 
+                }
+            } catch (error) {
+                console.error("渲染关卡时出错:", error);
+                app.innerHTML = `<h2 class="text-red-500">哎呀，爱心代码出错了，快让泽浩来修！</h2>`;
+            }
+        }
+
+        // 流程控制
+        function nextStage() {
+            if (currentStageIndex < stages.length - 1) {
+                currentStageIndex++;
+                renderCurrentStage();
+            }
+        }
+
+        // 终极彩蛋逻辑
+        function openGift() {
+            const giftBtn = getEl('gift-btn');
+            giftBtn.innerText = '💥';
+            giftBtn.classList.add('animate-pulse-fast');
+            
+            showToast('准备好迎接爱意攻击！', 1000);
+            
+            setTimeout(() => {
+                triggerKissExplosion();
+                setTimeout(() => {
+                    nextStage();
+                }, 1000);
+            }, 500);
+        }
+
+        // 初始化执行
+        document.addEventListener('DOMContentLoaded', () => {
+            createBackgroundHearts();
+            renderCurrentStage();
+            
+            // 防止移动端长按弹出菜单影响游戏体验
+            document.oncontextmenu = (e) => {
+                e.preventDefault();
+            };
+        });
+
+    </script>
+</body>
+</html>
