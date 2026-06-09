@@ -16,6 +16,11 @@
     <!-- Load GSAP for advanced animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Load Three.js for 3D Backgrounds -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Load GLTFLoader to parse your custom .glb file -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
     <script>
         tailwind.config = {
@@ -27,12 +32,12 @@
                     },
                     colors: {
                         r6: {
-                            black: '#050505',
-                            dark: '#0a0a0a',
+                            black: '#020611', // 更新为深邃蓝黑
+                            dark: '#050a18',
                             panel: 'rgba(255, 255, 255, 0.03)',
                             border: 'rgba(255, 255, 255, 0.08)',
-                            neon: '#ccff00', // 极光荧光黄
-                            cyan: '#00f0ff', // 数字青
+                            neon: '#00f0ff', // 统一偏向青蓝调
+                            cyan: '#4da6ff', // 晶莹的亮蓝
                         }
                     }
                 }
@@ -43,7 +48,7 @@
     <style>
         /* Base Styling & Noise Texture */
         body {
-            background-color: #050505;
+            background-color: #020611; /* 匹配参考图的深蓝底色 */
             color: #ffffff;
             overflow-x: hidden;
             scroll-behavior: smooth;
@@ -68,12 +73,12 @@
             border-radius: 24px;
         }
 
-        /* Fluid Gradient Orb (Pure CSS) */
+        /* Fluid Gradient Orb (Pure CSS) - 更新为深海青蓝渐变 */
         .fluid-orb {
             position: absolute;
             width: 60vw;
             height: 60vw;
-            background: radial-gradient(circle, rgba(0,240,255,0.4) 0%, rgba(204,255,0,0.2) 40%, rgba(0,0,0,0) 70%);
+            background: radial-gradient(circle, rgba(0,240,255,0.3) 0%, rgba(20,100,255,0.2) 40%, rgba(0,0,0,0) 70%);
             border-radius: 50%;
             filter: blur(80px);
             animation: breathe 10s infinite alternate ease-in-out;
@@ -97,7 +102,7 @@
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-image: linear-gradient(90deg, #ccff00 0%, #00f0ff 100%);
+            background-image: linear-gradient(90deg, #00f0ff 0%, #4da6ff 100%); /* 匹配晶莹蓝 */
         }
 
         /* Spring Animation for Interactions */
@@ -144,6 +149,9 @@
 
     <!-- Global Noise Overlay -->
     <div class="noise-bg"></div>
+    
+    <!-- 3D Background Canvas -->
+    <canvas id="three-canvas" class="fixed top-0 left-0 w-full h-full z-[-2] pointer-events-none"></canvas>
 
     <!-- Navigation -->
     <nav class="fixed top-0 w-full z-50 p-6 mix-blend-difference">
@@ -438,12 +446,206 @@
         }
 
         window.onload = () => {
-            // 安全检查：确保 GSAP 和 ScrollTrigger 已经成功加载再执行后续脚本
-            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+            // 安全检查：确保 GSAP, ScrollTrigger 和 THREE 已经成功加载再执行后续脚本
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && typeof THREE !== 'undefined') {
                 
                 // --- 注册插件 ---
                 gsap.registerPlugin(ScrollTrigger);
 
+                // --- 3D 模型背景初始化 (Three.js) ---
+                const canvas = document.getElementById('three-canvas');
+                const scene = new THREE.Scene();
+                
+                // 调整相机视野，使其更具张力
+                const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+                renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // 优化性能
+                renderer.setSize(window.innerWidth, window.innerHeight);
+                // 开启物理光照衰减，让高光更真实
+                renderer.physicallyCorrectLights = true; 
+                camera.position.z = 35;
+
+                // --- 影棚级高级布光系统 (匹配参考图) ---
+                // 1. 基础环境暗光 (深蓝色调)
+                const ambientLight = new THREE.AmbientLight(0x0a1530, 1.5);
+                scene.add(ambientLight);
+                
+                // 2. 顶部锐利主高光 (制造水晶表面的强烈白色反光)
+                const mainHighlight = new THREE.DirectionalLight(0xffffff, 8.0);
+                mainHighlight.position.set(10, 30, 20);
+                scene.add(mainHighlight);
+
+                // 3. 内部/背部透射光 (制造晶莹剔透的湖蓝色)
+                const coreBlueLight = new THREE.PointLight(0x00aaff, 50, 100);
+                coreBlueLight.position.set(0, -5, -10);
+                scene.add(coreBlueLight);
+
+                // 4. 左侧青色轮廓光
+                const cyanRimLight = new THREE.PointLight(0x00ffff, 30, 100);
+                cyanRimLight.position.set(-20, 10, 10);
+                scene.add(cyanRimLight);
+
+                // 5. 右下角微弱的金色/暖色反光 (匹配参考图边缘的细节)
+                const goldRimLight = new THREE.PointLight(0xffd700, 15, 100);
+                goldRimLight.position.set(20, -15, 15);
+                scene.add(goldRimLight);
+
+                // 创建一个空容器 (Group) 来挂载自定义模型
+                const modelGroup = new THREE.Group();
+                scene.add(modelGroup);
+
+                // ----------------------------------------------------
+                // ✨ 新增魔法：动态生成“蓝-青”渐变纹理
+                // ----------------------------------------------------
+                const gradientCanvas = document.createElement('canvas');
+                gradientCanvas.width = 512;
+                gradientCanvas.height = 512;
+                const ctx = gradientCanvas.getContext('2d');
+                // 绘制对角线渐变 (从深蓝过渡到数字青色)
+                const gradient = ctx.createLinearGradient(0, 0, 512, 512);
+                gradient.addColorStop(0, '#0022ff'); // 深邃蓝
+                gradient.addColorStop(0.5, '#00aaff'); // 湖水蓝
+                gradient.addColorStop(1, '#00ffff'); // 亮青色
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, 512, 512);
+                const gradientTexture = new THREE.CanvasTexture(gradientCanvas);
+
+                // 加载你托管的自定义模型
+                // 使用 jsDelivr CDN 链接彻底解决跨域与格式拦截问题
+                const loader = new THREE.GLTFLoader();
+                const modelUrl = "https://cdn.jsdelivr.net/gh/Dai-Zehao/image-hosting@main/care/sjq.glb";
+                
+                loader.load(modelUrl, function(gltf) {
+                    const customModel = gltf.scene;
+                    
+                    // 遍历模型，强制替换为“渐变透明水晶”材质
+                    customModel.traverse((child) => {
+                        if (child.isMesh) {
+                            child.material = new THREE.MeshPhysicalMaterial({ 
+                                map: gradientTexture, // 注入我们刚刚动态生成的渐变贴图
+                                color: 0xffffff, // 基础色调设为白，让渐变纹理显现
+                                emissive: 0x020815,
+                                metalness: 0.1, 
+                                roughness: 0.02, // 极其光滑
+                                transmission: 0.85, // 稍微降低透光率（不到100%），让渐变色彩更容易附着在表面
+                                ior: 1.6, // 折射率
+                                thickness: 8.0, 
+                                clearcoat: 1.0, // 保留清漆反光
+                                clearcoatRoughness: 0.05, 
+                                transparent: true,
+                                opacity: 1.0,
+                                side: THREE.DoubleSide // 双面渲染，让晶体内部的交错结构也能透出渐变色
+                            });
+                        }
+                    });
+                    
+                    // 自动计算模型的包围盒，并居中
+                    const box = new THREE.Box3().setFromObject(customModel);
+                    const center = box.getCenter(new THREE.Vector3());
+                    customModel.position.x += (customModel.position.x - center.x);
+                    customModel.position.y += (customModel.position.y - center.y);
+                    customModel.position.z += (customModel.position.z - center.z);
+                    
+                    // 自动规范化模型大小，使其适应当前视口
+                    const size = box.getSize(new THREE.Vector3()).length();
+                    const scaleFactor = 25 / size; 
+                    customModel.scale.set(scaleFactor, scaleFactor, scaleFactor);
+
+                    modelGroup.add(customModel);
+                }, undefined, function(error) {
+                    console.error("自定义模型加载失败，请检查链接或CORS设置:", error);
+                });
+
+                // 创建外层悬浮数据粒子 (颜色改为冰蓝色配合整体基调)
+                const particlesGeometry = new THREE.BufferGeometry();
+                const particlesCount = 500;
+                const posArray = new Float32Array(particlesCount * 3);
+                for(let i = 0; i < particlesCount * 3; i++) {
+                    const r = 20 + Math.random() * 30;
+                    const theta = Math.random() * 2 * Math.PI;
+                    const phi = Math.acos(2 * Math.random() - 1);
+                    posArray[i*3] = r * Math.sin(phi) * Math.cos(theta);
+                    posArray[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+                    posArray[i*3+2] = r * Math.cos(phi);
+                }
+                particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+                const particlesMaterial = new THREE.PointsMaterial({
+                    size: 0.15,
+                    color: 0x00f0ff, // 冰蓝色粒子
+                    transparent: true,
+                    opacity: 0.5,
+                    blending: THREE.AdditiveBlending
+                });
+                const particleMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+                scene.add(particleMesh);
+
+                // 鼠标交互变量
+                let mouseX = 0;
+                let mouseY = 0;
+                let targetX = 0;
+                let targetY = 0;
+
+                document.addEventListener('mousemove', (event) => {
+                    mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+                    mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+                });
+
+                // 3D 动画循环
+                const clock = new THREE.Clock();
+                function animate3D() {
+                    requestAnimationFrame(animate3D);
+                    const elapsedTime = clock.getElapsedTime();
+
+                    // 基础自转 (应用于存放模型的容器组)
+                    modelGroup.rotation.y += 0.001;
+                    modelGroup.rotation.x += 0.0005;
+                    particleMesh.rotation.y = -0.0008;
+                    
+                    // 微小的“呼吸”缩放特效
+                    const scale = 1 + Math.sin(elapsedTime * 1.5) * 0.03;
+                    modelGroup.scale.set(scale, scale, scale);
+
+                    // 相机的鼠标缓动跟随 (Parallax 效果)
+                    targetX = mouseX * 3;
+                    targetY = mouseY * 3;
+                    camera.position.x += (targetX - camera.position.x) * 0.02;
+                    camera.position.y += (targetY - camera.position.y) * 0.02;
+                    camera.lookAt(scene.position);
+
+                    renderer.render(scene, camera);
+                }
+                animate3D();
+
+                // 响应窗口大小变化
+                window.addEventListener('resize', () => {
+                    camera.aspect = window.innerWidth / window.innerHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(window.innerWidth, window.innerHeight);
+                });
+
+                // 结合 GSAP 将 3D 模型与滚动事件绑定
+                // 当滚动到核心功能区时，你的自定义模型会产生复杂的旋转与拉近
+                gsap.to(modelGroup.rotation, {
+                    y: Math.PI * 2.5,
+                    z: Math.PI / 4,
+                    scrollTrigger: {
+                        trigger: "#features",
+                        start: "top bottom",
+                        end: "bottom top",
+                        scrub: 1.5 // 添加平滑的惯性
+                    }
+                });
+                gsap.to(camera.position, {
+                    z: 12, // 滚动时拉近相机，造成模型在背后撑满全屏的压迫感
+                    scrollTrigger: {
+                        trigger: "#features",
+                        start: "top bottom",
+                        end: "top 20%",
+                        scrub: true
+                    }
+                });
+                
+                // --- 网页原有 UI 的 GSAP 动画 ---
                 // Hero Entry Animation (Advanced Stagger & Mask Reveal)
                 const tl = gsap.timeline();
                 
