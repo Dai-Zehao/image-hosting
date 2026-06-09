@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R6 Studio | 高级灵动健康管理</title>
+    
+    <!-- Load Fonts: Inter for data, Space Grotesk for architectural/brutalist headings -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Load GSAP for advanced animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        r6: {
+                            black: '#050505',
+                            dark: '#0a0a0a',
+                            panel: 'rgba(255, 255, 255, 0.03)',
+                            border: 'rgba(255, 255, 255, 0.08)',
+                            neon: '#ccff00', // 极光荧光黄
+                            cyan: '#00f0ff', // 数字青
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base Styling & Noise Texture */
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* The microscopic noise texture overlay for realism */
+        .noise-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            opacity: 0.04;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: var(--tw-bg-opacity, rgba(255, 255, 255, 0.03));
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+        }
+
+        /* Fluid Gradient Orb (Pure CSS) */
+        .fluid-orb {
+            position: absolute;
+            width: 60vw;
+            height: 60vw;
+            background: radial-gradient(circle, rgba(0,240,255,0.4) 0%, rgba(204,255,0,0.2) 40%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            animation: breathe 10s infinite alternate ease-in-out;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes breathe {
+            0% { transform: scale(0.8) translate(10%, 10%); }
+            100% { transform: scale(1.2) translate(-10%, -10%); }
+        }
+
+        /* Text Gradient Utility */
+        .text-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(90deg, #fff 0%, rgba(255,255,255,0.4) 100%);
+        }
+        .text-neon-gradient {
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-image: linear-gradient(90deg, #ccff00 0%, #00f0ff 100%);
+        }
+
+        /* Spring Animation for Interactions */
+        .spring-btn {
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s;
+        }
+        .spring-btn:active {
+            transform: scale(0.92);
+        }
+
+        /* Liquid Fill Animation */
+        .liquid-fill {
+            transition: height 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        /* Hide Scrollbar but keep functionality */
+        ::-webkit-scrollbar { width: 0px; }
+
+        @keyframes float {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        .animate-float-delayed {
+            animation: float 7s ease-in-out infinite;
+            animation-delay: 2s;
+        }
+        .animate-float-fast {
+            animation: float 5s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+        
+        /* Text Reveal Mask */
+        .reveal-mask {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-r6-neon selection:text-black">
+
+    <!-- Global Noise Overlay -->
+    <div class="noise-bg"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 p-6 mix-blend-difference">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="font-display font-bold text-2xl tracking-tighter text-white">R6<span class="text-r6-neon">.</span></div>
+            <div class="flex gap-8 text-sm font-medium tracking-wide">
+                <a href="#dashboard" class="hover:text-r6-neon transition-colors cursor-pointer">APP</a>
+                <a href="#analysis" class="hover:text-r6-cyan transition-colors cursor-pointer">DATA</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Showcase Hero Section -->
+    <section class="relative w-full h-screen flex items-center justify-center overflow-hidden">
+        <!-- Dynamic Fluid Background element -->
+        <div class="fluid-orb opacity-50" id="hero-orb"></div>
+        
+        <!-- Floating UI Card 1: Diet -->
+        <div class="absolute top-[20%] left-[10%] md:left-[20%] glass-panel p-4 flex items-center gap-4 animate-float opacity-0 ui-card z-0 hidden md:flex" data-speed="-2">
+            <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-xl">🥑</div>
+            <div>
+                <div class="text-xs text-white/50 font-mono">Avocado Toast</div>
+                <div class="font-bold text-r6-neon">320 kcal</div>
+            </div>
+        </div>
+
+        <!-- Floating UI Card 2: Weight -->
+        <div class="absolute bottom-[25%] right-[10%] md:right-[20%] glass-panel p-4 flex flex-col gap-1 animate-float-delayed opacity-0 ui-card z-0" data-speed="2">
+            <div class="text-xs text-r6-cyan font-mono uppercase tracking-widest">Current Weight</div>
+            <div class="flex items-end gap-2">
+                <div class="text-3xl font-display font-bold">68.4</div>
+                <div class="text-sm text-r6-neon mb-1">↓ 0.2kg</div>
+            </div>
+        </div>
+
+        <!-- Floating UI Card 3: Status -->
+        <div class="absolute top-[35%] right-[5%] md:right-[15%] glass-panel py-2 px-4 rounded-full flex items-center gap-2 animate-float-fast opacity-0 ui-card z-0 hidden lg:flex" data-speed="1">
+            <div class="w-2 h-2 rounded-full bg-r6-neon shadow-[0_0_8px_#ccff00]"></div>
+            <div class="text-xs font-mono text-white/70">Metabolism Active</div>
+        </div>
+
+        <div class="z-10 text-center px-4 mix-blend-lighten flex flex-col items-center">
+            <div class="reveal-mask">
+                <h1 class="hero-text font-display font-bold text-[12vw] md:text-[8vw] leading-none tracking-tighter uppercase text-white transform translate-y-full">
+                    精准追踪
+                </h1>
+            </div>
+            <div class="reveal-mask mt-2">
+                <h1 class="hero-text font-display font-bold text-[12vw] md:text-[8vw] leading-none tracking-tighter uppercase text-neon-gradient transform translate-y-full">
+                    无感记录
+                </h1>
+            </div>
+            <p class="mt-8 text-lg md:text-xl font-light text-white/60 max-w-xl mx-auto opacity-0" id="hero-subtitle">
+                告别繁琐，轻松掌控你的体重、饮食与生活。
+            </p>
+            <div class="mt-12 opacity-0" id="hero-cta">
+                <button onclick="scrollToFeatures()" class="spring-btn glass-panel px-8 py-4 font-medium tracking-widest text-sm hover:bg-white/10 hover:border-r6-neon transition-all group flex items-center gap-3">
+                    <span>探索核心能力</span>
+                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Features Matrix (Replaced the abstract dashboard) -->
+    <section id="features" class="relative w-full py-24 px-6 md:px-12 max-w-7xl mx-auto flex flex-col justify-center">
+        <div class="mb-16 md:text-center">
+            <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">R6 Care</h2>
+            <p class="text-white/50 text-lg max-w-2xl mx-auto">化繁为简，将最强大的 AI 与健康数据分析引擎，封装在极简的交互体验之下。</p>
+        </div>
+
+        <!-- Bento Box Grid Layout for the 8 Features -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6" id="feature-grid">
+            
+            <!-- Feature 1 -->
+            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-white/20 transition-all duration-500 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-r6-cyan/10 rounded-full blur-3xl group-hover:bg-r6-cyan/20 transition-all"></div>
+                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
+                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">极致隐私保护</h3>
+                <p class="text-white/50 text-sm leading-relaxed">无需担心隐私泄露，端到端加密技术让您完全掌控自己的健康信息。</p>
+            </div>
+
+            <!-- Feature 2 -->
+            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-r6-cyan/30 transition-all duration-500 relative overflow-hidden lg:col-span-2">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-r6-neon/10 rounded-full blur-3xl group-hover:bg-r6-neon/20 transition-all"></div>
+                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
+                    <svg class="w-6 h-6 text-r6-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">智能自动化操作</h3>
+                <p class="text-white/50 text-sm leading-relaxed max-w-md">一键完成复杂操作，内置算法智能预测您的健康需求，让记录与管理变得前所未有的便捷与无感。</p>
+            </div>
+
+            <!-- Feature 3 -->
+            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-white/20 transition-all duration-500 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-all"></div>
+                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
+                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">无感智能提醒</h3>
+                <p class="text-white/50 text-sm leading-relaxed">个性化提醒系统，依据生物钟在最合适的时间提醒您进食、喝水和运动。</p>
+            </div>
+
+            <!-- Feature 4 -->
+            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-white/20 transition-all duration-500 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-all"></div>
+                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
+                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">极简人机交互</h3>
+                <p class="text-white/50 text-sm leading-relaxed">直观的高级界面设计，符合人类直觉的操作习惯，让每个人都能轻松上手。</p>
+            </div>
+
+            <!-- Feature 5 -->
+            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-r6-neon/30 transition-all duration-500 relative overflow-hidden lg:col-span-2">
+                <div class="absolute bottom-0 right-0 w-40 h-40 bg-r6-neon/10 rounded-full blur-3xl group-hover:bg-r6-neon/20 transition-all"></div>
+                <div class="flex justify-between items-start">
+                    <div>
+                        <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
+                            <svg class="w-6 h-6 text-r6-neon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                        </div>
+                        <h3 class="text-xl font-bold mb-3">AI 视觉食物识别</h3>
+                        <p class="text-white/50 text-sm leading-relaxed max-w-sm">拍照即可瞬间识别食物并自动计算热量与营养信息，彻底告别繁琐的手动录入时代。</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 6 -->
+            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-white/20 transition-all duration-500 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-all"></div>
+                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
+                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">智能计划推荐</h3>
+                <p class="text-white/50 text-sm leading-relaxed">基于您的健康目标和饮食习惯，AI引擎为您精准匹配最适合的餐食方案。</p>
+            </div>
+
+            <!-- Feature 7 -->
+            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-white/20 transition-all duration-500 relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-all"></div>
+                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
+                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3">实时进度追踪</h3>
+                <p class="text-white/50 text-sm leading-relaxed">全维度监测健康指标变化，趋势一目了然，让您清楚了解自己的每一步进化。</p>
+            </div>
+
+            <!-- Feature 8 -->
+            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-r6-cyan/30 transition-all duration-500 relative overflow-hidden lg:col-span-3">
+                <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-r6-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
+                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10 relative z-10">
+                    <svg class="w-6 h-6 text-r6-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+                </div>
+                <h3 class="text-xl font-bold mb-3 relative z-10">深度数据洞察</h3>
+                <p class="text-white/50 text-sm leading-relaxed max-w-xl relative z-10">深度剖析您的体成分、宏量营养素分布与代谢数据。不仅是记录，更是提供专业的健康洞察和未来行动建议。</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Data Interface Mockup Section -->
+    <section class="relative w-full py-24 px-6 md:px-12 max-w-7xl mx-auto flex flex-col items-center">
+        <div class="mb-16 md:text-center w-full">
+            <h2 class="font-display text-3xl md:text-5xl font-bold mb-4">可视化数据中枢</h2>
+            <p class="text-white/50 text-lg max-w-2xl mx-auto">告别枯燥的表格，用最具质感的方式，直观呈现您的身体密码与饮食结构。</p>
+        </div>
+        
+        <!-- The Mockup Dashboard -->
+        <div class="w-full max-w-5xl glass-panel p-6 md:p-10 rounded-[2rem] border border-white/10 relative overflow-hidden app-mockup">
+            <!-- Glowing orb inside mockup -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] bg-r6-cyan/10 rounded-full blur-[100px] pointer-events-none"></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
+                <!-- Calorie Ring -->
+                <div class="col-span-1 glass-panel bg-white/5 p-8 rounded-3xl flex flex-col items-center justify-center relative overflow-hidden hover:bg-white/10 transition-colors duration-500">
+                    <div class="absolute -top-10 -right-10 w-32 h-32 bg-r6-neon/10 rounded-full blur-2xl"></div>
+                    <div class="relative w-48 h-48 flex items-center justify-center mb-6">
+                        <svg class="w-full h-full transform -rotate-90 drop-shadow-2xl" viewBox="0 0 100 100">
+                            <!-- Background Circle -->
+                            <circle cx="50" cy="50" r="42" stroke="rgba(255,255,255,0.05)" stroke-width="6" fill="none" />
+                            <!-- Progress Circle (Animated) -->
+                            <circle cx="50" cy="50" r="42" stroke="#ccff00" stroke-width="6" fill="none" stroke-dasharray="264" stroke-dashoffset="264" stroke-linecap="round" class="calorie-ring-progress drop-shadow-[0_0_12px_rgba(204,255,0,0.6)]" />
+                        </svg>
+                        <div class="absolute flex flex-col items-center">
+                            <span class="text-4xl font-bold font-display text-white" id="calorie-counter">0</span>
+                            <span class="text-sm text-white/50 tracking-widest uppercase mt-1">Kcal Intake</span>
+                        </div>
+                    </div>
+                    <div class="w-full flex justify-between text-sm px-4">
+                        <div class="text-white/50">目标 <span class="text-white ml-1">2,400</span></div>
+                        <div class="text-r6-neon font-medium">剩余 560</div>
+                    </div>
+                </div>
+
+                <!-- Stats List -->
+                <div class="col-span-1 lg:col-span-2 flex flex-col gap-5 justify-center">
+                    <!-- Protein -->
+                    <div class="glass-panel bg-white/5 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-r6-cyan/30 transition-colors">
+                        <div class="w-full md:w-1/3">
+                            <div class="text-sm text-white/50 mb-1 uppercase tracking-wider font-mono">Protein</div>
+                            <div class="text-2xl font-bold">120g <span class="text-sm text-r6-cyan font-normal">/ 150g</span></div>
+                        </div>
+                        <div class="w-full md:w-2/3 h-3 bg-black/50 rounded-full overflow-hidden border border-white/5">
+                            <div class="h-full bg-r6-cyan w-0 rounded-full shadow-[0_0_10px_#00f0ff] relative progress-bar-fill" data-target="80%">
+                                <div class="absolute top-0 right-0 bottom-0 w-8 bg-gradient-to-r from-transparent to-white/50"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Carbs -->
+                    <div class="glass-panel bg-white/5 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-white/30 transition-colors">
+                        <div class="w-full md:w-1/3">
+                            <div class="text-sm text-white/50 mb-1 uppercase tracking-wider font-mono">Carbs</div>
+                            <div class="text-2xl font-bold">180g <span class="text-sm text-white/30 font-normal">/ 200g</span></div>
+                        </div>
+                        <div class="w-full md:w-2/3 h-3 bg-black/50 rounded-full overflow-hidden border border-white/5">
+                            <div class="h-full bg-white/80 w-0 rounded-full relative progress-bar-fill" data-target="90%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Fat -->
+                    <div class="glass-panel bg-white/5 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-white/30 transition-colors">
+                        <div class="w-full md:w-1/3">
+                            <div class="text-sm text-white/50 mb-1 uppercase tracking-wider font-mono">Fat</div>
+                            <div class="text-2xl font-bold">45g <span class="text-sm text-white/30 font-normal">/ 60g</span></div>
+                        </div>
+                        <div class="w-full md:w-2/3 h-3 bg-black/50 rounded-full overflow-hidden border border-white/5">
+                            <div class="h-full bg-white/40 w-0 rounded-full relative progress-bar-fill" data-target="75%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="w-full py-32 px-6 flex flex-col items-center justify-center relative overflow-hidden border-t border-white/5 mt-12">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-b from-r6-neon/5 to-r6-cyan/5 rounded-full blur-[120px] pointer-events-none"></div>
+        <h2 class="font-display text-4xl md:text-6xl font-bold text-center mb-6 relative z-10 max-w-3xl leading-tight">
+            准备好迎接您的<br/><span class="text-neon-gradient">健康生活</span>了吗？
+        </h2>
+        <p class="text-white/50 text-lg mb-10 relative z-10 text-center">加入 R6 Care 早期体验计划，抢先感受次世代健康管理。</p>
+        <button onclick="showPopup()" class="relative z-10 spring-btn bg-white text-black px-12 py-5 rounded-full font-bold tracking-widest uppercase hover:bg-r6-neon hover:shadow-[0_0_40px_rgba(204,255,0,0.4)] hover:scale-105 transition-all duration-300">
+            申请内测权限
+        </button>
+    </section>
+
+    <!-- Custom Popup Modal -->
+    <div id="waitlist-popup" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="glass-panel p-8 md:p-12 text-center max-w-md mx-auto relative transform scale-95 transition-transform duration-300" id="waitlist-popup-content">
+            <button onclick="hidePopup()" class="absolute top-4 right-4 text-white/50 hover:text-white transition-colors">
+                <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <div class="w-16 h-16 rounded-full bg-r6-cyan/10 border border-r6-cyan/30 flex items-center justify-center mx-auto mb-6">
+                <svg class="w-8 h-8 text-r6-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            </div>
+            <h3 class="text-2xl font-bold mb-2">暂未开放</h3>
+            <p class="text-white/60 mb-8">内测通道正在紧锣密鼓地筹备中，敬请期待！</p>
+            <button onclick="hidePopup()" class="spring-btn bg-white/10 hover:bg-white/20 text-white px-8 py-3 rounded-full font-medium transition-all w-full border border-white/10">
+                我知道了
+            </button>
+        </div>
+    </div>
+
+    <!-- Simple footer to close the page -->
+    <footer class="w-full py-8 text-center text-white/30 text-sm font-mono border-t border-white/5">
+        <p>© 2026 R6 Studio. All systems operational.</p>
+    </footer>
+
+    <script>
+        // Smooth scroll to features
+        function scrollToFeatures() {
+            document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Popup Handlers
+        function showPopup() {
+            const popup = document.getElementById('waitlist-popup');
+            const content = document.getElementById('waitlist-popup-content');
+            popup.classList.remove('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-95');
+            content.classList.add('scale-100');
+        }
+
+        function hidePopup() {
+            const popup = document.getElementById('waitlist-popup');
+            const content = document.getElementById('waitlist-popup-content');
+            popup.classList.add('opacity-0', 'pointer-events-none');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+        }
+
+        window.onload = () => {
+            // 安全检查：确保 GSAP 和 ScrollTrigger 已经成功加载再执行后续脚本
+            if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                
+                // --- 注册插件 ---
+                gsap.registerPlugin(ScrollTrigger);
+
+                // Hero Entry Animation (Advanced Stagger & Mask Reveal)
+                const tl = gsap.timeline();
+                
+                // 1. Text slides up from mask
+                tl.to(".hero-text", { 
+                    y: 0, 
+                    duration: 1.2, 
+                    stagger: 0.15, 
+                    ease: "expo.out" 
+                })
+                // 2. Subtitle & CTA fade in
+                .to(["#hero-subtitle", "#hero-cta"], { 
+                    opacity: 1, 
+                    y: 0, 
+                    duration: 1, 
+                    stagger: 0.2, 
+                    ease: "power3.out" 
+                }, "-=0.8")
+                // 3. Floating UI cards fade and pop in
+                .to(".ui-card", {
+                    opacity: 1,
+                    scale: 1,
+                    duration: 1,
+                    stagger: 0.2,
+                    ease: "back.out(1.5)"
+                }, "-=1");
+
+                // Parallax effect on mouse move
+                document.addEventListener('mousemove', (e) => {
+                    const x = (e.clientX / window.innerWidth - 0.5);
+                    const y = (e.clientY / window.innerHeight - 0.5);
+                    
+                    // Orb parallax
+                    gsap.to("#hero-orb", {
+                        x: x * 60,
+                        y: y * 60,
+                        duration: 1.5,
+                        ease: "power2.out"
+                    });
+
+                    // UI Cards parallax with different depths
+                    document.querySelectorAll('.ui-card').forEach(card => {
+                        const speed = card.getAttribute('data-speed');
+                        gsap.to(card, {
+                            x: x * 30 * speed,
+                            y: y * 30 * speed,
+                            duration: 1.5,
+                            ease: "power2.out"
+                        });
+                    });
+                });
+
+                // Feature Cards Stagger Animation on Scroll (Fixed: Using fromTo to prevent invisible stuck state)
+                gsap.fromTo(".feature-card", 
+                    { y: 60, opacity: 0 },
+                    {
+                        scrollTrigger: {
+                            trigger: "#features",
+                            start: "top 80%"
+                        },
+                        y: 0,
+                        opacity: 1,
+                        duration: 0.8,
+                        stagger: 0.1,
+                        ease: "back.out(1.2)"
+                    }
+                );
+
+                // App Mockup Animation on Scroll (Advanced Sequence - Fixed for maximum stability)
+                const mockupTl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: ".app-mockup",
+                        start: "top 85%"
+                    }
+                });
+
+                const counterObj = { val: 0 };
+
+                // 1. Container floats up
+                mockupTl.fromTo(".app-mockup", 
+                    { y: 100, scale: 0.95, opacity: 0 },
+                    {
+                        y: 0,
+                        scale: 1,
+                        opacity: 1,
+                        duration: 1.2,
+                        ease: "expo.out"
+                    }
+                )
+                // 2. Number counting up (Safely implemented)
+                .to(counterObj, {
+                    val: 1840,
+                    duration: 2,
+                    ease: "power3.out",
+                    onUpdate: () => {
+                        document.getElementById("calorie-counter").innerText = Math.floor(counterObj.val).toLocaleString();
+                    }
+                }, "-=0.8")
+                // 3. Calorie Ring Drawing
+                .fromTo(".calorie-ring-progress", 
+                    { strokeDashoffset: 264 },
+                    {
+                        strokeDashoffset: 66,
+                        duration: 2,
+                        ease: "power3.out"
+                    }, "-=2"
+                )
+                // 4. Progress Bars Filling
+                .fromTo(".progress-bar-fill", 
+                    { width: "0%" },
+                    {
+                        width: function(index, target) {
+                            return target.getAttribute("data-target");
+                        },
+                        duration: 1.5,
+                        stagger: 0.2,
+                        ease: "power3.out"
+                    }, "-=1.5");
+            } else {
+                console.warn("GSAP or ScrollTrigger failed to load. Please check your network connection.");
+            }
+        };
+    </script>
+</body>
+</html>
