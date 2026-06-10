@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>R6 Care丨健康追踪</title>
+    <title>R6 Care | 健康管理</title>
     
     <!-- Load Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -115,12 +115,13 @@
     <div class="noise-bg"></div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 p-6 mix-blend-difference pointer-events-none">
+    <!-- [修复]: 将 p-6 (24px) 改为更大的内边距，使其避开全屏的圆角相框遮挡 -->
+    <nav class="fixed top-0 w-full z-[60] px-8 pt-8 md:px-14 md:pt-10 mix-blend-difference pointer-events-none">
         <div class="max-w-7xl mx-auto flex justify-between items-center pointer-events-auto">
             <!-- 替换为图片 Logo -->
-            <a href="#" class="block hover:opacity-80 transition-opacity">
+            <a href="#" class="block hover:opacity-80 transition-opacity drop-shadow-lg">
                 <!-- 使用 jsDelivr CDN 加速链接，确保图片能稳定加载，并缩小了尺寸 -->
-                <img src="https://cdn.jsdelivr.net/gh/Dai-Zehao/image-hosting@main/logo.png" alt="R6 Studio Logo" class="h-5 md:h-6 w-auto">
+                <img src="https://cdn.jsdelivr.net/gh/Dai-Zehao/image-hosting@main/logo.png" alt="R6 Studio Logo" class="h-5 md:h-6 w-auto relative z-10">
             </a>
             <div class="flex gap-8 text-sm font-medium tracking-wide">
                 <a href="#features" class="hover:text-r6-neon transition-colors cursor-pointer">APP</a>
@@ -137,8 +138,8 @@
             <spline-viewer loading-anim-type="spinner-small-light" url="https://prod.spline.design/u9lGgrfbeK9nw6gi/scene.splinecode"></spline-viewer>
         </div>
 
-        <!-- 纯净版物理遮罩：已替换为您指定的 #a5feef 颜色，用于遮挡水印 -->
-        <div class="absolute bottom-0 right-0 w-[160px] h-[60px] bg-[#a5feef] z-20 pointer-events-none"></div>
+        <!-- 纯净版物理遮罩：扩大尺寸，彻底遮挡水印 -->
+        <div class="absolute bottom-2 right-2 md:bottom-4 md:right-4 w-[160px] h-[48px] bg-[#a5feef] z-20 pointer-events-none rounded-lg"></div>
 
         <!-- 全局圆角矩形窗景遮罩 (通过向外发散的阴影罩住四周边缘，提供高级镜头感) -->
         <div class="absolute inset-3 md:inset-5 z-20 pointer-events-none rounded-[2rem] md:rounded-[3rem] shadow-[0_0_0_100vh_#020611] border border-white/10"></div>
