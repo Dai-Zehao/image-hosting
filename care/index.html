@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>R6 Studio | Care</title>
+    <title>R6 Care丨健康追踪</title>
     
-    <!-- Load Fonts: Inter for data, Space Grotesk for architectural/brutalist headings -->
+    <!-- Load Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -16,7 +16,7 @@
     <!-- Load GSAP for advanced animations -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
+    
     <!-- Load Spline Viewer -->
     <script type="module" src="https://unpkg.com/@splinetool/viewer@1.12.97/build/spline-viewer.js"></script>
 
@@ -30,12 +30,12 @@
                     },
                     colors: {
                         r6: {
-                            black: '#050505',
-                            dark: '#0a0a0a',
+                            black: '#020611',
+                            dark: '#050a18',
                             panel: 'rgba(255, 255, 255, 0.03)',
                             border: 'rgba(255, 255, 255, 0.08)',
-                            neon: '#ccff00', // 极光荧光黄
-                            cyan: '#00f0ff', // 数字青
+                            neon: '#00f0ff',
+                            cyan: '#4da6ff',
                         }
                     }
                 }
@@ -46,7 +46,7 @@
     <style>
         /* Base Styling & Noise Texture */
         body {
-            background-color: #050505;
+            background-color: #020611;
             color: #ffffff;
             overflow-x: hidden;
             scroll-behavior: smooth;
@@ -71,24 +71,6 @@
             border-radius: 24px;
         }
 
-        /* Fluid Gradient Orb (Pure CSS) */
-        .fluid-orb {
-            position: absolute;
-            width: 60vw;
-            height: 60vw;
-            background: radial-gradient(circle, rgba(0,240,255,0.4) 0%, rgba(204,255,0,0.2) 40%, rgba(0,0,0,0) 70%);
-            border-radius: 50%;
-            filter: blur(80px);
-            animation: breathe 10s infinite alternate ease-in-out;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        @keyframes breathe {
-            0% { transform: scale(0.8) translate(10%, 10%); }
-            100% { transform: scale(1.2) translate(-10%, -10%); }
-        }
-
         /* Text Gradient Utility */
         .text-gradient {
             background-clip: text;
@@ -100,7 +82,7 @@
             background-clip: text;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-image: linear-gradient(90deg, #ccff00 0%, #00f0ff 100%);
+            background-image: linear-gradient(90deg, #00f0ff 0%, #4da6ff 100%);
         }
 
         /* Spring Animation for Interactions */
@@ -111,35 +93,19 @@
             transform: scale(0.92);
         }
 
-        /* Liquid Fill Animation */
-        .liquid-fill {
-            transition: height 1.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-        }
-
         /* Hide Scrollbar but keep functionality */
         ::-webkit-scrollbar { width: 0px; }
 
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(2deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        .animate-float {
-            animation: float 6s ease-in-out infinite;
-        }
-        .animate-float-delayed {
-            animation: float 7s ease-in-out infinite;
-            animation-delay: 2s;
-        }
-        .animate-float-fast {
-            animation: float 5s ease-in-out infinite;
-            animation-delay: 1s;
-        }
-        
         /* Text Reveal Mask */
         .reveal-mask {
             clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
             overflow: hidden;
+        }
+
+        /* 尝试从底层强制隐藏 Spline Logo */
+        spline-viewer::part(logo) {
+            display: none !important;
+            opacity: 0 !important;
         }
     </style>
 </head>
@@ -149,19 +115,34 @@
     <div class="noise-bg"></div>
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 p-6 mix-blend-difference">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <div class="font-display font-bold text-2xl tracking-tighter text-white">R6<span class="text-r6-neon">.</span></div>
+    <nav class="fixed top-0 w-full z-50 p-6 mix-blend-difference pointer-events-none">
+        <div class="max-w-7xl mx-auto flex justify-between items-center pointer-events-auto">
+            <!-- 替换为图片 Logo -->
+            <a href="#" class="block hover:opacity-80 transition-opacity">
+                <!-- 使用 jsDelivr CDN 加速链接，确保图片能稳定加载，并缩小了尺寸 -->
+                <img src="https://cdn.jsdelivr.net/gh/Dai-Zehao/image-hosting@main/logo.png" alt="R6 Studio Logo" class="h-5 md:h-6 w-auto">
+            </a>
             <div class="flex gap-8 text-sm font-medium tracking-wide">
-                <a href="#dashboard" class="hover:text-r6-neon transition-colors cursor-pointer">APP</a>
+                <a href="#features" class="hover:text-r6-neon transition-colors cursor-pointer">APP</a>
                 <a href="#analysis" class="hover:text-r6-cyan transition-colors cursor-pointer">DATA</a>
             </div>
         </div>
     </nav>
 
-    <!-- Showcase Hero Section -->
-    <section class="relative w-full h-screen overflow-hidden">
-        <spline-viewer loading-anim-type="spinner-small-light" url="https://prod.spline.design/u9lGgrfbeK9nw6gi/scene.splinecode"></spline-viewer>
+    <!-- Showcase Hero Section with Spline Banner -->
+    <section class="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[#020611]">
+        
+        <!-- Spline Viewer Background (Now the absolute focus of the hero section) -->
+        <div class="absolute inset-0 w-full h-full z-0">
+            <spline-viewer loading-anim-type="spinner-small-light" url="https://prod.spline.design/u9lGgrfbeK9nw6gi/scene.splinecode"></spline-viewer>
+        </div>
+
+        <!-- 纯净版物理遮罩：已替换为您指定的 #a5feef 颜色，用于遮挡水印 -->
+        <div class="absolute bottom-0 right-0 w-[160px] h-[60px] bg-[#a5feef] z-20 pointer-events-none"></div>
+
+        <!-- 全局圆角矩形窗景遮罩 (通过向外发散的阴影罩住四周边缘，提供高级镜头感) -->
+        <div class="absolute inset-3 md:inset-5 z-20 pointer-events-none rounded-[2rem] md:rounded-[3rem] shadow-[0_0_0_100vh_#020611] border border-white/10"></div>
+
     </section>
 
     <!-- Core Features Matrix (Replaced the abstract dashboard) -->
@@ -262,7 +243,7 @@
     </section>
 
     <!-- Data Interface Mockup Section -->
-    <section class="relative w-full py-24 px-6 md:px-12 max-w-7xl mx-auto flex flex-col items-center">
+    <section id="analysis" class="relative w-full py-24 px-6 md:px-12 max-w-7xl mx-auto flex flex-col items-center">
         <div class="mb-16 md:text-center w-full">
             <h2 class="font-display text-3xl md:text-5xl font-bold mb-4">可视化数据中枢</h2>
             <p class="text-white/50 text-lg max-w-2xl mx-auto">告别枯燥的表格，用最具质感的方式，直观呈现您的身体密码与饮食结构。</p>
@@ -394,13 +375,29 @@
         }
 
         window.onload = () => {
-            // 安全检查：确保 GSAP 和 ScrollTrigger 已经成功加载再执行后续脚本
+            // ==========================================
+            // 魔法修复：拦截 Spline 对滚动事件的独占捕获
+            // 这样既能保持鼠标互动，又能让用户正常向下滚动网页
+            // ==========================================
+            const splineViewer = document.querySelector('spline-viewer');
+            if (splineViewer) {
+                const preventScrollTrap = (e) => {
+                    // 阻止事件继续向内部传递给 Spline 的画布层，保护原生页面的滚动行为
+                    e.stopPropagation();
+                };
+                // 使用 capture: true 确保我们在事件到达内部元素前将其拦截
+                splineViewer.addEventListener('wheel', preventScrollTrap, { capture: true, passive: true });
+                splineViewer.addEventListener('touchmove', preventScrollTrap, { capture: true, passive: true });
+                splineViewer.addEventListener('touchstart', preventScrollTrap, { capture: true, passive: true });
+            }
+
+            // 确保 GSAP 成功加载再执行后续脚本
             if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
                 
                 // --- 注册插件 ---
                 gsap.registerPlugin(ScrollTrigger);
 
-                // Feature Cards Stagger Animation on Scroll (Fixed: Using fromTo to prevent invisible stuck state)
+                // Feature Cards Stagger Animation on Scroll
                 gsap.fromTo(".feature-card", 
                     { y: 60, opacity: 0 },
                     {
@@ -416,7 +413,7 @@
                     }
                 );
 
-                // App Mockup Animation on Scroll (Advanced Sequence - Fixed for maximum stability)
+                // App Mockup Animation on Scroll
                 const mockupTl = gsap.timeline({
                     scrollTrigger: {
                         trigger: ".app-mockup",
@@ -437,7 +434,7 @@
                         ease: "expo.out"
                     }
                 )
-                // 2. Number counting up (Safely implemented)
+                // 2. Number counting up
                 .to(counterObj, {
                     val: 1840,
                     duration: 2,
