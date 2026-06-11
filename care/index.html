@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>R6 Care | 健康管理</title>
+    <title>R6 Studio | 高级灵动健康管理</title>
     
     <!-- Load Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet">
     
     <!-- Load Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -44,7 +44,6 @@
     </script>
 
     <style>
-        /* Base Styling & Noise Texture */
         body {
             background-color: #020611;
             color: #ffffff;
@@ -52,7 +51,6 @@
             scroll-behavior: smooth;
         }
 
-        /* The microscopic noise texture overlay for realism */
         .noise-bg {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -62,7 +60,6 @@
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
 
-        /* Glassmorphism Utilities */
         .glass-panel {
             background: var(--tw-bg-opacity, rgba(255, 255, 255, 0.03));
             backdrop-filter: blur(24px);
@@ -71,7 +68,6 @@
             border-radius: 24px;
         }
 
-        /* Text Gradient Utility */
         .text-gradient {
             background-clip: text;
             -webkit-background-clip: text;
@@ -85,7 +81,6 @@
             background-image: linear-gradient(90deg, #00f0ff 0%, #4da6ff 100%);
         }
 
-        /* Spring Animation for Interactions */
         .spring-btn {
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s;
         }
@@ -93,38 +88,52 @@
             transform: scale(0.92);
         }
 
-        /* Hide Scrollbar but keep functionality */
         ::-webkit-scrollbar { width: 0px; }
 
-        /* Text Reveal Mask */
         .reveal-mask {
             clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
             overflow: hidden;
         }
 
-        /* 尝试从底层强制隐藏 Spline Logo */
         spline-viewer::part(logo) {
             display: none !important;
             opacity: 0 !important;
+        }
+        
+        .text-outline {
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.1);
+        }
+
+        /* ✨ 3D 卡片专属样式：提供透视景深空间 */
+        .perspective-1000 {
+            perspective: 1000px;
+        }
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+        /* Z轴向后退（光晕层沉在玻璃底下） */
+        .-translate-z-10 {
+            transform: translateZ(-20px);
+        }
+        /* Z轴向前凸（文字/图标漂浮在玻璃上方） */
+        .translate-z-20 {
+            transform: translateZ(40px);
         }
     </style>
 </head>
 <body class="antialiased selection:bg-r6-neon selection:text-black">
 
-    <!-- Global Noise Overlay -->
     <div class="noise-bg"></div>
 
     <!-- Navigation -->
-    <!-- [修复]: 将 p-6 (24px) 改为更大的内边距，使其避开全屏的圆角相框遮挡 -->
     <nav class="fixed top-0 w-full z-[60] px-8 pt-8 md:px-14 md:pt-10 mix-blend-difference pointer-events-none">
         <div class="max-w-7xl mx-auto flex justify-between items-center pointer-events-auto">
-            <!-- 替换为图片 Logo -->
             <a href="#" class="block hover:opacity-80 transition-opacity drop-shadow-lg">
-                <!-- 使用 jsDelivr CDN 加速链接，确保图片能稳定加载，并缩小了尺寸 -->
                 <img src="https://cdn.jsdelivr.net/gh/Dai-Zehao/image-hosting@main/logo.png" alt="R6 Studio Logo" class="h-5 md:h-6 w-auto relative z-10">
             </a>
             <div class="flex gap-8 text-sm font-medium tracking-wide">
-                <a href="#features" class="hover:text-r6-neon transition-colors cursor-pointer">APP</a>
+                <a href="#features-wrapper" class="hover:text-r6-neon transition-colors cursor-pointer">APP</a>
                 <a href="#analysis" class="hover:text-r6-cyan transition-colors cursor-pointer">DATA</a>
             </div>
         </div>
@@ -132,116 +141,99 @@
 
     <!-- Showcase Hero Section with Spline Banner -->
     <section class="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[#020611]">
-        
-        <!-- Spline Viewer Background (Now the absolute focus of the hero section) -->
         <div class="absolute inset-0 w-full h-full z-0">
             <spline-viewer loading-anim-type="spinner-small-light" url="https://prod.spline.design/u9lGgrfbeK9nw6gi/scene.splinecode"></spline-viewer>
         </div>
-
-        <!-- 纯净版物理遮罩：扩大尺寸，彻底遮挡水印 -->
         <div class="absolute bottom-2 right-2 md:bottom-4 md:right-4 w-[160px] h-[48px] bg-[#a5feef] z-20 pointer-events-none rounded-lg"></div>
-
-        <!-- 全局圆角矩形窗景遮罩 (通过向外发散的阴影罩住四周边缘，提供高级镜头感) -->
         <div class="absolute inset-3 md:inset-5 z-20 pointer-events-none rounded-[2rem] md:rounded-[3rem] shadow-[0_0_0_100vh_#020611] border border-white/10"></div>
-
     </section>
 
-    <!-- Core Features Matrix (Replaced the abstract dashboard) -->
-    <section id="features" class="relative w-full py-24 px-6 md:px-12 max-w-7xl mx-auto flex flex-col justify-center">
-        <div class="mb-16 md:text-center">
-            <h2 class="font-display text-4xl md:text-5xl font-bold mb-4">R6 Care</h2>
-            <p class="text-white/50 text-lg max-w-2xl mx-auto">化繁为简，将最强大的 AI 与健康数据分析引擎，封装在极简的交互体验之下。</p>
+    <!-- ==========================================
+         ✨ 核心重构：滚轮映射横向画廊 + 鼠标3D悬浮
+         ========================================== -->
+    <section id="features-wrapper" class="relative w-full h-screen overflow-hidden bg-[#020611]">
+        
+        <div class="absolute top-1/2 left-0 -translate-y-1/2 whitespace-nowrap pointer-events-none z-0" id="bg-text">
+            <h2 class="font-display font-black text-[30vw] text-outline leading-none opacity-20 uppercase tracking-tighter">
+                R6 CARE INTELLIGENCE
+            </h2>
         </div>
 
-        <!-- Bento Box Grid Layout for the 8 Features -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6" id="feature-grid">
+        <div class="absolute top-24 md:top-32 left-6 md:left-16 z-20 max-w-sm pointer-events-none mix-blend-difference">
+            <h2 class="font-display text-4xl md:text-5xl font-bold mb-3 text-white">R6 Care<br/><span class="text-neon-gradient">轻松管理</span></h2>
+            <p class="text-white/50 text-xs md:text-sm mt-2">*功能为预期实现功能，目前beta不涵盖所有功能</p>
+        </div>
+
+        <div class="horizontal-scroll-track flex items-end h-full w-[max-content] pb-16 md:pb-24 px-[100vw] md:px-[35vw] gap-6 md:gap-12 relative z-10">
             
-            <!-- Feature 1 -->
-            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-white/20 transition-all duration-500 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-r6-cyan/10 rounded-full blur-3xl group-hover:bg-r6-cyan/20 transition-all"></div>
-                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
-                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
-                </div>
-                <h3 class="text-xl font-bold mb-3">极致隐私保护</h3>
-                <p class="text-white/50 text-sm leading-relaxed">无需担心隐私泄露，端到端加密技术让您完全掌控自己的健康信息。</p>
-            </div>
-
-            <!-- Feature 2 -->
-            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-r6-cyan/30 transition-all duration-500 relative overflow-hidden lg:col-span-2">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-r6-neon/10 rounded-full blur-3xl group-hover:bg-r6-neon/20 transition-all"></div>
-                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
-                    <svg class="w-6 h-6 text-r6-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                </div>
-                <h3 class="text-xl font-bold mb-3">智能自动化操作</h3>
-                <p class="text-white/50 text-sm leading-relaxed max-w-md">一键完成复杂操作，内置算法智能预测您的健康需求，让记录与管理变得前所未有的便捷与无感。</p>
-            </div>
-
-            <!-- Feature 3 -->
-            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-white/20 transition-all duration-500 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-all"></div>
-                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
-                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
-                </div>
-                <h3 class="text-xl font-bold mb-3">无感智能提醒</h3>
-                <p class="text-white/50 text-sm leading-relaxed">个性化提醒系统，依据生物钟在最合适的时间提醒您进食、喝水和运动。</p>
-            </div>
-
-            <!-- Feature 4 -->
-            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-white/20 transition-all duration-500 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-all"></div>
-                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
-                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-                </div>
-                <h3 class="text-xl font-bold mb-3">极简人机交互</h3>
-                <p class="text-white/50 text-sm leading-relaxed">直观的高级界面设计，符合人类直觉的操作习惯，让每个人都能轻松上手。</p>
-            </div>
-
-            <!-- Feature 5 -->
-            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-r6-neon/30 transition-all duration-500 relative overflow-hidden lg:col-span-2">
-                <div class="absolute bottom-0 right-0 w-40 h-40 bg-r6-neon/10 rounded-full blur-3xl group-hover:bg-r6-neon/20 transition-all"></div>
-                <div class="flex justify-between items-start">
-                    <div>
-                        <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
-                            <svg class="w-6 h-6 text-r6-neon" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                        </div>
-                        <h3 class="text-xl font-bold mb-3">AI 视觉食物识别</h3>
-                        <p class="text-white/50 text-sm leading-relaxed max-w-sm">拍照即可瞬间识别食物并自动计算热量与营养信息，彻底告别繁琐的手动录入时代。</p>
+            <!-- Gallery Panel 1 (3D 结构改造) -->
+            <!-- 外层负责占位并执行原有的滚动动画 -->
+            <div class="gallery-panel w-[80vw] md:w-[26vw] h-[40vh] md:h-[45vh] shrink-0 perspective-1000">
+                <!-- 内部面板负责响应鼠标滑动产生的倾斜，以及开启 preserve-3d -->
+                <div class="gallery-panel-inner glass-panel w-full h-full p-8 flex flex-col justify-between group hover:border-r6-cyan/50 transition-colors duration-500 relative overflow-hidden preserve-3d shadow-2xl">
+                    <!-- 背景光晕层 (向后沉降) -->
+                    <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-r6-cyan/10 rounded-full blur-[80px] group-hover:bg-r6-cyan/20 transition-all duration-700 -translate-z-10"></div>
+                    <!-- 核心内容层 (向前悬浮) -->
+                    <div class="translate-z-20 pointer-events-none">
+                        <div class="font-mono text-white/20 text-4xl md:text-6xl font-bold mb-4 drop-shadow-xl">01</div>
+                        <h3 class="text-2xl md:text-3xl font-bold mb-3 text-white">AI 视觉识别</h3>
+                        <p class="text-white/60 text-base leading-relaxed">拍照即识，自动结算热量与营养。彻底告别繁琐的手动录入。</p>
+                    </div>
+                    <!-- 互动按钮层 (向前悬浮) -->
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-r6-cyan group-hover:bg-r6-cyan group-hover:text-black group-hover:scale-110 transition-all duration-300 translate-z-20 shadow-xl pointer-events-auto cursor-pointer">
+                        <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path></svg>
                     </div>
                 </div>
             </div>
 
-            <!-- Feature 6 -->
-            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-white/20 transition-all duration-500 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-all"></div>
-                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
-                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+            <!-- Gallery Panel 2 (3D 结构改造) -->
+            <div class="gallery-panel w-[80vw] md:w-[26vw] h-[40vh] md:h-[45vh] shrink-0 mb-12 md:mb-20 perspective-1000">
+                <div class="gallery-panel-inner glass-panel w-full h-full p-8 flex flex-col justify-between group hover:border-r6-neon/50 transition-colors duration-500 relative overflow-hidden preserve-3d shadow-2xl">
+                    <div class="absolute -top-10 -left-10 w-64 h-64 bg-r6-neon/10 rounded-full blur-[80px] group-hover:bg-r6-neon/20 transition-all duration-700 -translate-z-10"></div>
+                    <div class="translate-z-20 pointer-events-none">
+                        <div class="font-mono text-white/20 text-4xl md:text-6xl font-bold mb-4 drop-shadow-xl">02</div>
+                        <h3 class="text-2xl md:text-3xl font-bold mb-3 text-white">智能预判</h3>
+                        <p class="text-white/60 text-base leading-relaxed">深度学习生活节律，懂你所需。先一步为您备好健康选项。</p>
+                    </div>
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-r6-neon group-hover:bg-r6-neon group-hover:text-black group-hover:scale-110 transition-all duration-300 translate-z-20 shadow-xl pointer-events-auto cursor-pointer">
+                        <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
                 </div>
-                <h3 class="text-xl font-bold mb-3">智能计划推荐</h3>
-                <p class="text-white/50 text-sm leading-relaxed">基于您的健康目标和饮食习惯，AI引擎为您精准匹配最适合的餐食方案。</p>
             </div>
 
-            <!-- Feature 7 -->
-            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-white/20 transition-all duration-500 relative overflow-hidden">
-                <div class="absolute top-0 right-0 w-32 h-32 bg-white/5 rounded-full blur-3xl group-hover:bg-white/10 transition-all"></div>
-                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10">
-                    <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+            <!-- Gallery Panel 3 (3D 结构改造) -->
+            <div class="gallery-panel w-[80vw] md:w-[26vw] h-[40vh] md:h-[45vh] shrink-0 perspective-1000">
+                <div class="gallery-panel-inner glass-panel w-full h-full p-8 flex flex-col justify-between group hover:border-white/50 transition-colors duration-500 relative overflow-hidden preserve-3d shadow-2xl">
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-white/5 rounded-full blur-[100px] group-hover:bg-white/10 transition-all duration-700 -translate-z-10"></div>
+                    <div class="translate-z-20 pointer-events-none">
+                        <div class="font-mono text-white/20 text-4xl md:text-6xl font-bold mb-4 drop-shadow-xl">03</div>
+                        <h3 class="text-2xl md:text-3xl font-bold mb-3 text-white">深度洞察</h3>
+                        <p class="text-white/60 text-base leading-relaxed">多维剖析体质与代谢数据，成为您专属的前瞻性私人健康智囊。</p>
+                    </div>
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:bg-white group-hover:text-black group-hover:scale-110 transition-all duration-300 translate-z-20 shadow-xl pointer-events-auto cursor-pointer">
+                        <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                    </div>
                 </div>
-                <h3 class="text-xl font-bold mb-3">实时进度追踪</h3>
-                <p class="text-white/50 text-sm leading-relaxed">全维度监测健康指标变化，趋势一目了然，让您清楚了解自己的每一步进化。</p>
             </div>
 
-            <!-- Feature 8 -->
-            <div class="feature-card glass-panel p-8 group hover:bg-white/5 hover:border-r6-cyan/30 transition-all duration-500 relative overflow-hidden lg:col-span-3">
-                <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-r6-cyan/5 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-700"></div>
-                <div class="w-12 h-12 rounded-xl bg-white/5 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-500 border border-white/10 relative z-10">
-                    <svg class="w-6 h-6 text-r6-cyan" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path></svg>
+             <!-- Gallery Panel 4 (3D 结构改造) -->
+             <div class="gallery-panel w-[80vw] md:w-[26vw] h-[40vh] md:h-[45vh] shrink-0 mb-12 md:mb-20 perspective-1000">
+                <div class="gallery-panel-inner glass-panel w-full h-full p-8 flex flex-col justify-between group hover:border-r6-cyan/50 transition-colors duration-500 relative overflow-hidden preserve-3d shadow-2xl">
+                    <div class="absolute -top-10 -right-10 w-64 h-64 bg-gradient-to-br from-r6-neon/20 to-r6-cyan/20 rounded-full blur-[80px] group-hover:opacity-100 opacity-50 transition-all duration-700 -translate-z-10"></div>
+                    <div class="translate-z-20 pointer-events-none">
+                        <div class="font-mono text-white/20 text-4xl md:text-6xl font-bold mb-4 drop-shadow-xl">04</div>
+                        <h3 class="text-2xl md:text-3xl font-bold mb-3 text-white">直觉交互</h3>
+                        <p class="text-white/60 text-base leading-relaxed">金融级加密保护。融合流体物理动效，让每一次触控尽在掌握。</p>
+                    </div>
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-full border border-white/20 flex items-center justify-center text-white group-hover:bg-gradient-to-r group-hover:from-r6-neon group-hover:to-r6-cyan group-hover:text-black group-hover:border-transparent group-hover:scale-110 transition-all duration-300 translate-z-20 shadow-xl pointer-events-auto cursor-pointer">
+                        <svg class="w-6 h-6 md:w-7 md:h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                    </div>
                 </div>
-                <h3 class="text-xl font-bold mb-3 relative z-10">深度数据洞察</h3>
-                <p class="text-white/50 text-sm leading-relaxed max-w-xl relative z-10">深度剖析您的体成分、宏量营养素分布与代谢数据。不仅是记录，更是提供专业的健康洞察和未来行动建议。</p>
             </div>
 
         </div>
     </section>
+    <!-- ========================================== -->
 
     <!-- Data Interface Mockup Section -->
     <section id="analysis" class="relative w-full py-24 px-6 md:px-12 max-w-7xl mx-auto flex flex-col items-center">
@@ -252,18 +244,14 @@
         
         <!-- The Mockup Dashboard -->
         <div class="w-full max-w-5xl glass-panel p-6 md:p-10 rounded-[2rem] border border-white/10 relative overflow-hidden app-mockup">
-            <!-- Glowing orb inside mockup -->
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[30rem] h-[30rem] bg-r6-cyan/10 rounded-full blur-[100px] pointer-events-none"></div>
 
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 relative z-10">
-                <!-- Calorie Ring -->
                 <div class="col-span-1 glass-panel bg-white/5 p-8 rounded-3xl flex flex-col items-center justify-center relative overflow-hidden hover:bg-white/10 transition-colors duration-500">
                     <div class="absolute -top-10 -right-10 w-32 h-32 bg-r6-neon/10 rounded-full blur-2xl"></div>
                     <div class="relative w-48 h-48 flex items-center justify-center mb-6">
                         <svg class="w-full h-full transform -rotate-90 drop-shadow-2xl" viewBox="0 0 100 100">
-                            <!-- Background Circle -->
                             <circle cx="50" cy="50" r="42" stroke="rgba(255,255,255,0.05)" stroke-width="6" fill="none" />
-                            <!-- Progress Circle (Animated) -->
                             <circle cx="50" cy="50" r="42" stroke="#ccff00" stroke-width="6" fill="none" stroke-dasharray="264" stroke-dashoffset="264" stroke-linecap="round" class="calorie-ring-progress drop-shadow-[0_0_12px_rgba(204,255,0,0.6)]" />
                         </svg>
                         <div class="absolute flex flex-col items-center">
@@ -277,9 +265,7 @@
                     </div>
                 </div>
 
-                <!-- Stats List -->
                 <div class="col-span-1 lg:col-span-2 flex flex-col gap-5 justify-center">
-                    <!-- Protein -->
                     <div class="glass-panel bg-white/5 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-r6-cyan/30 transition-colors">
                         <div class="w-full md:w-1/3">
                             <div class="text-sm text-white/50 mb-1 uppercase tracking-wider font-mono">Protein</div>
@@ -292,7 +278,6 @@
                         </div>
                     </div>
                     
-                    <!-- Carbs -->
                     <div class="glass-panel bg-white/5 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-white/30 transition-colors">
                         <div class="w-full md:w-1/3">
                             <div class="text-sm text-white/50 mb-1 uppercase tracking-wider font-mono">Carbs</div>
@@ -303,7 +288,6 @@
                         </div>
                     </div>
 
-                    <!-- Fat -->
                     <div class="glass-panel bg-white/5 p-6 rounded-2xl flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-white/30 transition-colors">
                         <div class="w-full md:w-1/3">
                             <div class="text-sm text-white/50 mb-1 uppercase tracking-wider font-mono">Fat</div>
@@ -347,18 +331,11 @@
         </div>
     </div>
 
-    <!-- Simple footer to close the page -->
     <footer class="w-full py-8 text-center text-white/30 text-sm font-mono border-t border-white/5">
         <p>© 2026 R6 Studio. All systems operational.</p>
     </footer>
 
     <script>
-        // Smooth scroll to features
-        function scrollToFeatures() {
-            document.getElementById('features').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Popup Handlers
         function showPopup() {
             const popup = document.getElementById('waitlist-popup');
             const content = document.getElementById('waitlist-popup-content');
@@ -376,96 +353,119 @@
         }
 
         window.onload = () => {
-            // ==========================================
-            // 魔法修复：拦截 Spline 对滚动事件的独占捕获
-            // 这样既能保持鼠标互动，又能让用户正常向下滚动网页
-            // ==========================================
             const splineViewer = document.querySelector('spline-viewer');
             if (splineViewer) {
-                const preventScrollTrap = (e) => {
-                    // 阻止事件继续向内部传递给 Spline 的画布层，保护原生页面的滚动行为
-                    e.stopPropagation();
-                };
-                // 使用 capture: true 确保我们在事件到达内部元素前将其拦截
+                const preventScrollTrap = (e) => e.stopPropagation();
                 splineViewer.addEventListener('wheel', preventScrollTrap, { capture: true, passive: true });
                 splineViewer.addEventListener('touchmove', preventScrollTrap, { capture: true, passive: true });
                 splineViewer.addEventListener('touchstart', preventScrollTrap, { capture: true, passive: true });
             }
 
-            // 确保 GSAP 成功加载再执行后续脚本
             if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
-                
-                // --- 注册插件 ---
                 gsap.registerPlugin(ScrollTrigger);
 
-                // Feature Cards Stagger Animation on Scroll
-                gsap.fromTo(".feature-card", 
-                    { y: 60, opacity: 0 },
-                    {
-                        scrollTrigger: {
-                            trigger: "#features",
-                            start: "top 80%"
-                        },
-                        y: 0,
-                        opacity: 1,
-                        duration: 0.8,
-                        stagger: 0.1,
-                        ease: "back.out(1.2)"
-                    }
-                );
+                // ========================================================
+                // ✨ 动画核心1：滚轮映射的横向视差系统
+                // ========================================================
+                const featuresWrapper = document.getElementById("features-wrapper");
+                const horizontalTrack = document.querySelector(".horizontal-scroll-track");
+                const bgText = document.getElementById("bg-text");
+                const panels = gsap.utils.toArray(".gallery-panel");
 
-                // App Mockup Animation on Scroll
-                const mockupTl = gsap.timeline({
+                const getScrollAmount = () => -(horizontalTrack.scrollWidth - window.innerWidth);
+
+                const tween = gsap.to(horizontalTrack, {
+                    x: getScrollAmount,
+                    ease: "none",
                     scrollTrigger: {
-                        trigger: ".app-mockup",
-                        start: "top 85%"
+                        trigger: featuresWrapper,
+                        pin: true, 
+                        scrub: 1,  
+                        end: () => `+=${horizontalTrack.scrollWidth}`,
+                        invalidateOnRefresh: true 
                     }
                 });
 
-                const counterObj = { val: 0 };
+                panels.forEach((panel) => {
+                    gsap.fromTo(panel, 
+                        { rotationY: 15, scale: 0.9, opacity: 0.2 },
+                        { 
+                            rotationY: -15, scale: 1, opacity: 1, 
+                            ease: "none",
+                            scrollTrigger: {
+                                trigger: panel,
+                                containerAnimation: tween,
+                                start: "left 90%",
+                                end: "right 10%",
+                                scrub: true
+                            }
+                        }
+                    );
+                });
 
-                // 1. Container floats up
-                mockupTl.fromTo(".app-mockup", 
-                    { y: 100, scale: 0.95, opacity: 0 },
-                    {
-                        y: 0,
-                        scale: 1,
-                        opacity: 1,
-                        duration: 1.2,
-                        ease: "expo.out"
+                gsap.to(bgText, {
+                    x: () => -(bgText.offsetWidth / 2),
+                    ease: "none",
+                    scrollTrigger: {
+                        trigger: featuresWrapper,
+                        start: "top top",
+                        end: () => `+=${horizontalTrack.scrollWidth}`,
+                        scrub: 1.5,
+                        invalidateOnRefresh: true
                     }
-                )
-                // 2. Number counting up
-                .to(counterObj, {
-                    val: 1840,
-                    duration: 2,
-                    ease: "power3.out",
-                    onUpdate: () => {
-                        document.getElementById("calorie-counter").innerText = Math.floor(counterObj.val).toLocaleString();
-                    }
-                }, "-=0.8")
-                // 3. Calorie Ring Drawing
-                .fromTo(".calorie-ring-progress", 
-                    { strokeDashoffset: 264 },
-                    {
-                        strokeDashoffset: 66,
-                        duration: 2,
-                        ease: "power3.out"
-                    }, "-=2"
-                )
-                // 4. Progress Bars Filling
-                .fromTo(".progress-bar-fill", 
-                    { width: "0%" },
-                    {
-                        width: function(index, target) {
-                            return target.getAttribute("data-target");
-                        },
-                        duration: 1.5,
-                        stagger: 0.2,
-                        ease: "power3.out"
-                    }, "-=1.5");
-            } else {
-                console.warn("GSAP or ScrollTrigger failed to load. Please check your network connection.");
+                });
+
+                // ========================================================
+                // ✨ 动画核心2：全局鼠标位置驱动的 3D 悬浮视差互动
+                // ========================================================
+                // 监听整个屏幕的鼠标移动
+                document.addEventListener('mousemove', (e) => {
+                    const centerX = window.innerWidth / 2;
+                    const centerY = window.innerHeight / 2;
+                    
+                    // 计算鼠标相对屏幕中心的偏移比例 (-1 到 1 之间)
+                    const xOffset = (e.clientX - centerX) / centerX;
+                    const yOffset = (e.clientY - centerY) / centerY;
+                    
+                    // [已修改] 大幅增加旋转幅度：将最大偏转角度从 12 度提升至 35 度
+                    const rotateX = yOffset * -35; 
+                    const rotateY = xOffset * 35;
+                    
+                    // 让所有的卡片内层统一跟随这个角度
+                    panels.forEach(panel => {
+                        const inner = panel.querySelector('.gallery-panel-inner');
+                        gsap.to(inner, {
+                            rotateX: rotateX,
+                            rotateY: rotateY,
+                            duration: 0.6, 
+                            ease: "power2.out"
+                        });
+                    });
+                });
+                
+                // 当鼠标彻底离开浏览器窗口时，卡片弹性回正
+                document.addEventListener('mouseleave', () => {
+                    panels.forEach(panel => {
+                        const inner = panel.querySelector('.gallery-panel-inner');
+                        gsap.to(inner, {
+                            rotateX: 0,
+                            rotateY: 0,
+                            duration: 1.2,
+                            ease: "elastic.out(1, 0.4)" 
+                        });
+                    });
+                });
+
+                // App Mockup Animation on Scroll
+                const mockupTl = gsap.timeline({
+                    scrollTrigger: { trigger: ".app-mockup", start: "top 85%" }
+                });
+
+                const counterObj = { val: 0 };
+                mockupTl.fromTo(".app-mockup", { y: 100, scale: 0.95, opacity: 0 }, { y: 0, scale: 1, opacity: 1, duration: 1.2, ease: "expo.out" })
+                .to(counterObj, { val: 1840, duration: 2, ease: "power3.out", onUpdate: () => { document.getElementById("calorie-counter").innerText = Math.floor(counterObj.val).toLocaleString(); } }, "-=0.8")
+                .fromTo(".calorie-ring-progress", { strokeDashoffset: 264 }, { strokeDashoffset: 66, duration: 2, ease: "power3.out" }, "-=2")
+                .fromTo(".progress-bar-fill", { width: "0%" }, { width: function(index, target) { return target.getAttribute("data-target"); }, duration: 1.5, stagger: 0.2, ease: "power3.out" }, "-=1.5");
             }
         };
     </script>
