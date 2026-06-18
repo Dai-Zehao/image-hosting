@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>R6 Care</title>
+  </head>
+  <body>
+    <div id="app">
+      <div class="file-open-hint">
+        <h1>R6 Care 需要通过 Vite 启动</h1>
+        <p>如果你是双击打开 index.html，Vue 模块和 npm 依赖不会被正确加载。</p>
+        <code>npm.cmd install</code>
+        <code>npm.cmd run dev</code>
+        <p>然后打开终端里显示的 localhost 地址。</p>
+      </div>
+    </div>
+    <style>
+      body {
+        margin: 0;
+        background: #10120f;
+      }
+
+      .file-open-hint {
+        box-sizing: border-box;
+        min-height: 100vh;
+        display: grid;
+        align-content: center;
+        gap: 14px;
+        padding: 32px;
+        color: #f6f2e8;
+        font-family: "Microsoft YaHei", sans-serif;
+        background:
+          radial-gradient(circle at 20% 15%, rgba(119, 198, 178, .3), transparent 30%),
+          radial-gradient(circle at 80% 20%, rgba(236, 164, 84, .22), transparent 28%),
+          linear-gradient(135deg, #10120f, #20231d);
+      }
+
+      .file-open-hint h1,
+      .file-open-hint p {
+        max-width: 640px;
+        margin: 0;
+      }
+
+      .file-open-hint code {
+        width: max-content;
+        max-width: 100%;
+        padding: 12px 14px;
+        border: 1px solid rgba(255, 255, 255, .2);
+        border-radius: 14px;
+        color: #1d251c;
+        background: #d8f1df;
+      }
+    </style>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
