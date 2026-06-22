@@ -1,0 +1,1372 @@
+﻿[
+    {
+        "id":  "walk_stroll",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "散步（很慢）",
+        "intensity_zh":  "很轻",
+        "met":  2.3,
+        "kcal_30min_70kg":  81,
+        "source_code":  "17151",
+        "source_activity_en":  "Walking, less than 2.0 mph, level, strolling, very slow"
+    },
+    {
+        "id":  "walk_slow",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "慢走",
+        "intensity_zh":  "轻",
+        "met":  2.8,
+        "kcal_30min_70kg":  98,
+        "source_code":  "17152",
+        "source_activity_en":  "Walking, 2.0 to 2.4 mph, level, slow pace, firm surface"
+    },
+    {
+        "id":  "walk_dog",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "遛狗",
+        "intensity_zh":  "轻",
+        "met":  3,
+        "kcal_30min_70kg":  105,
+        "source_code":  "17165",
+        "source_activity_en":  "Walking the dog"
+    },
+    {
+        "id":  "walk_moderate",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "健走/中速步行",
+        "intensity_zh":  "中",
+        "met":  3.8,
+        "kcal_30min_70kg":  133,
+        "source_code":  "17190",
+        "source_activity_en":  "Walking, 2.8 to 3.4 mph, level, moderate pace, firm surface"
+    },
+    {
+        "id":  "walk_brisk",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "快走",
+        "intensity_zh":  "中高",
+        "met":  4.8,
+        "kcal_30min_70kg":  168,
+        "source_code":  "17200",
+        "source_activity_en":  "Walking, 3.5 to 3.9 mph, level, brisk, firm surface, walking for exercise"
+    },
+    {
+        "id":  "walk_very_brisk",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "极快走",
+        "intensity_zh":  "高",
+        "met":  5.5,
+        "kcal_30min_70kg":  193,
+        "source_code":  "17220",
+        "source_activity_en":  "Walking, 4.0 to 4.4 mph (6.4 to 7.0 km/h), level, firm surface, very brisk pace"
+    },
+    {
+        "id":  "nordic_walking_moderate",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "北欧健走",
+        "intensity_zh":  "中",
+        "met":  4.3,
+        "kcal_30min_70kg":  151,
+        "source_code":  "17302",
+        "source_activity_en":  "Walking, for exercise, 2.5 to 3.5 mph (4.0 to 5.6 km/h), with ski poles, Nordic walking, level, moderate pace"
+    },
+    {
+        "id":  "hiking_normal",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "徒步（田野丘陵正常速度）",
+        "intensity_zh":  "中",
+        "met":  5.3,
+        "kcal_30min_70kg":  186,
+        "source_code":  "17082",
+        "source_activity_en":  "Hiking or walking at a normal pace through fields and hillsides, no load"
+    },
+    {
+        "id":  "backpacking",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "背包徒步",
+        "intensity_zh":  "高",
+        "met":  7,
+        "kcal_30min_70kg":  245,
+        "source_code":  "17010",
+        "source_activity_en":  "Backpacking"
+    },
+    {
+        "id":  "stairs_slow",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "爬楼梯（慢速）",
+        "intensity_zh":  "中",
+        "met":  4.5,
+        "kcal_30min_70kg":  158,
+        "source_code":  "17133",
+        "source_activity_en":  "Stair climbing, slow pace"
+    },
+    {
+        "id":  "stairs_general",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "爬楼梯",
+        "intensity_zh":  "高",
+        "met":  6.8,
+        "kcal_30min_70kg":  238,
+        "source_code":  "17131",
+        "source_activity_en":  "Stair climbing, general"
+    },
+    {
+        "id":  "stairs_fast",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "爬楼梯（快速）",
+        "intensity_zh":  "高",
+        "met":  9.3,
+        "kcal_30min_70kg":  326,
+        "source_code":  "17134",
+        "source_activity_en":  "Stair climbing, fast pace, one step at a time"
+    },
+    {
+        "id":  "super_slow_jog",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "超慢跑（约4.2-6.0km/h）",
+        "intensity_zh":  "轻中",
+        "met":  3.3,
+        "kcal_30min_70kg":  116,
+        "source_code":  "12026",
+        "source_activity_en":  "Jogging 2.6 to 3.7 mph"
+    },
+    {
+        "id":  "jog_in_place",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "原地慢跑",
+        "intensity_zh":  "中",
+        "met":  4.8,
+        "kcal_30min_70kg":  168,
+        "source_code":  "12025",
+        "source_activity_en":  "Jogging, in place"
+    },
+    {
+        "id":  "jog_walk_combo",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "跑走结合",
+        "intensity_zh":  "中",
+        "met":  6,
+        "kcal_30min_70kg":  210,
+        "source_code":  "12010",
+        "source_activity_en":  "Jog/walk combination (jogging component of less than 10 minutes)"
+    },
+    {
+        "id":  "jog_general",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "慢跑",
+        "intensity_zh":  "高",
+        "met":  7.5,
+        "kcal_30min_70kg":  263,
+        "source_code":  "12020",
+        "source_activity_en":  "Jogging, general, self-selected pace"
+    },
+    {
+        "id":  "run_slow",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "跑步（约6.4-6.8km/h）",
+        "intensity_zh":  "高",
+        "met":  6.5,
+        "kcal_30min_70kg":  228,
+        "source_code":  "12028",
+        "source_activity_en":  "Running, 4 to 4.2 mph (13 min/mile)"
+    },
+    {
+        "id":  "run_8kph",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "跑步（约8km/h）",
+        "intensity_zh":  "高",
+        "met":  8.5,
+        "kcal_30min_70kg":  298,
+        "source_code":  "12030",
+        "source_activity_en":  "Running, 5.0 to 5.2 mph (12 min/mile)"
+    },
+    {
+        "id":  "run_10kph",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "跑步（约9.7-10.1km/h）",
+        "intensity_zh":  "很高",
+        "met":  9.3,
+        "kcal_30min_70kg":  326,
+        "source_code":  "12050",
+        "source_activity_en":  "Running, 6-6.3 mph (10 min/mile)"
+    },
+    {
+        "id":  "run_11kph",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "跑步（约11.3km/h）",
+        "intensity_zh":  "很高",
+        "met":  11,
+        "kcal_30min_70kg":  385,
+        "source_code":  "12070",
+        "source_activity_en":  "Running, 7 mph (8.5 min/mile)"
+    },
+    {
+        "id":  "run_stairs",
+        "category_zh":  "步行/跑步",
+        "name_zh":  "跑楼梯",
+        "intensity_zh":  "极高",
+        "met":  15,
+        "kcal_30min_70kg":  525,
+        "source_code":  "12170",
+        "source_activity_en":  "Running, stairs, up"
+    },
+    {
+        "id":  "cycling_leisure",
+        "category_zh":  "骑行",
+        "name_zh":  "自行车休闲骑行（\u003c16km/h）",
+        "intensity_zh":  "中",
+        "met":  4,
+        "kcal_30min_70kg":  140,
+        "source_code":  "01010",
+        "source_activity_en":  "Bicycling, \u003c10 mph, leisure, to work or for pleasure"
+    },
+    {
+        "id":  "cycling_slow",
+        "category_zh":  "骑行",
+        "name_zh":  "自行车轻松骑行（16-19km/h）",
+        "intensity_zh":  "中高",
+        "met":  6.8,
+        "kcal_30min_70kg":  238,
+        "source_code":  "01020",
+        "source_activity_en":  "Bicycling, 10-11.9 mph, leisure, slow, light effort"
+    },
+    {
+        "id":  "cycling_moderate",
+        "category_zh":  "骑行",
+        "name_zh":  "自行车中等骑行（19-22km/h）",
+        "intensity_zh":  "高",
+        "met":  8,
+        "kcal_30min_70kg":  280,
+        "source_code":  "01030",
+        "source_activity_en":  "Bicycling, 12-13.9 mph, leisure, moderate effort"
+    },
+    {
+        "id":  "cycling_fast",
+        "category_zh":  "骑行",
+        "name_zh":  "自行车快速骑行（22-26km/h）",
+        "intensity_zh":  "很高",
+        "met":  10,
+        "kcal_30min_70kg":  350,
+        "source_code":  "01040",
+        "source_activity_en":  "Bicycling, 14-15.9 mph, racing or leisure, fast, vigorous effort"
+    },
+    {
+        "id":  "mountain_bike",
+        "category_zh":  "骑行",
+        "name_zh":  "山地车",
+        "intensity_zh":  "高",
+        "met":  8.5,
+        "kcal_30min_70kg":  298,
+        "source_code":  "01009",
+        "source_activity_en":  "Bicycling, mountain, general"
+    },
+    {
+        "id":  "stationary_bike_general",
+        "category_zh":  "骑行",
+        "name_zh":  "固定自行车",
+        "intensity_zh":  "中高",
+        "met":  6.8,
+        "kcal_30min_70kg":  238,
+        "source_code":  "01200",
+        "source_activity_en":  "Bicycling, stationary, general"
+    },
+    {
+        "id":  "spinning",
+        "category_zh":  "骑行",
+        "name_zh":  "动感单车课程",
+        "intensity_zh":  "很高",
+        "met":  9,
+        "kcal_30min_70kg":  315,
+        "source_code":  "01270",
+        "source_activity_en":  "Bicycling, stationary, RPM/Spin bike class"
+    },
+    {
+        "id":  "cycling_hiit",
+        "category_zh":  "骑行",
+        "name_zh":  "室内自行车HIIT",
+        "intensity_zh":  "很高",
+        "met":  8.8,
+        "kcal_30min_70kg":  308,
+        "source_code":  "01305",
+        "source_activity_en":  "Bicycling, high intensity interval training"
+    },
+    {
+        "id":  "aerobics_general",
+        "category_zh":  "健身/力量",
+        "name_zh":  "有氧操",
+        "intensity_zh":  "高",
+        "met":  7.3,
+        "kcal_30min_70kg":  256,
+        "source_code":  "02000",
+        "source_activity_en":  "Aerobic, general"
+    },
+    {
+        "id":  "step_aerobics",
+        "category_zh":  "健身/力量",
+        "name_zh":  "踏板操",
+        "intensity_zh":  "高",
+        "met":  7.3,
+        "kcal_30min_70kg":  256,
+        "source_code":  "02002",
+        "source_activity_en":  "Aerobic, step, with 6-8 inch step"
+    },
+    {
+        "id":  "low_impact_aerobic_dance",
+        "category_zh":  "健身/力量",
+        "name_zh":  "低冲击有氧舞",
+        "intensity_zh":  "中",
+        "met":  4.8,
+        "kcal_30min_70kg":  168,
+        "source_code":  "02005",
+        "source_activity_en":  "Aerobic dance, low impact, moderate effort"
+    },
+    {
+        "id":  "high_impact_aerobic_dance",
+        "category_zh":  "健身/力量",
+        "name_zh":  "高冲击有氧舞",
+        "intensity_zh":  "高",
+        "met":  8,
+        "kcal_30min_70kg":  280,
+        "source_code":  "02006",
+        "source_activity_en":  "Aerobic dance, high impact, vigorous effort"
+    },
+    {
+        "id":  "calisthenics_light",
+        "category_zh":  "健身/力量",
+        "name_zh":  "徒手训练（轻）",
+        "intensity_zh":  "轻",
+        "met":  2.8,
+        "kcal_30min_70kg":  98,
+        "source_code":  "02024",
+        "source_activity_en":  "Calisthenics (e.g., curl ups, abdominal crunches, plank), light effort"
+    },
+    {
+        "id":  "calisthenics_moderate",
+        "category_zh":  "健身/力量",
+        "name_zh":  "徒手训练（中等）",
+        "intensity_zh":  "中",
+        "met":  3.8,
+        "kcal_30min_70kg":  133,
+        "source_code":  "02022",
+        "source_activity_en":  "Calisthenics (e.g., pushups, sit ups, pull-ups, lunges), moderate effort"
+    },
+    {
+        "id":  "calisthenics_vigorous",
+        "category_zh":  "健身/力量",
+        "name_zh":  "徒手训练（高强度）",
+        "intensity_zh":  "高",
+        "met":  7.5,
+        "kcal_30min_70kg":  263,
+        "source_code":  "02020",
+        "source_activity_en":  "Calisthenics (e.g., pushups, sit ups, pull-ups, jumping jacks, burpees, battling ropes), vigorous effort"
+    },
+    {
+        "id":  "bodyweight_general",
+        "category_zh":  "健身/力量",
+        "name_zh":  "自重抗阻训练",
+        "intensity_zh":  "中",
+        "met":  3,
+        "kcal_30min_70kg":  105,
+        "source_code":  "02056",
+        "source_activity_en":  "Body weight resistance exercises (e.g., squat, lunge, push-up, crunch), general"
+    },
+    {
+        "id":  "bodyweight_high",
+        "category_zh":  "健身/力量",
+        "name_zh":  "自重抗阻训练（高强度）",
+        "intensity_zh":  "高",
+        "met":  6.5,
+        "kcal_30min_70kg":  228,
+        "source_code":  "02057",
+        "source_activity_en":  "Body weight resistance exercises (e.g., squat, lunge, push-up, crunch), high intensity"
+    },
+    {
+        "id":  "weight_training_general",
+        "category_zh":  "健身/力量",
+        "name_zh":  "重量训练（多动作）",
+        "intensity_zh":  "中",
+        "met":  3.5,
+        "kcal_30min_70kg":  123,
+        "source_code":  "02054",
+        "source_activity_en":  "Resistance (weight) training, multiple exercises, 8-15 reps at varied resistance"
+    },
+    {
+        "id":  "weight_training_compound",
+        "category_zh":  "健身/力量",
+        "name_zh":  "重量训练（深蹲/硬拉）",
+        "intensity_zh":  "中高",
+        "met":  5,
+        "kcal_30min_70kg":  175,
+        "source_code":  "02052",
+        "source_activity_en":  "Resistance (weight) training, squats, deadlift, slow or explosive effort"
+    },
+    {
+        "id":  "weight_training_vigorous",
+        "category_zh":  "健身/力量",
+        "name_zh":  "重量训练/健美（高强度）",
+        "intensity_zh":  "高",
+        "met":  6,
+        "kcal_30min_70kg":  210,
+        "source_code":  "02050",
+        "source_activity_en":  "Resistance (weight lifting - free weight, nautilus or universal-type), power lifting or body building, vigorous effort"
+    },
+    {
+        "id":  "circuit_bodyweight",
+        "category_zh":  "健身/力量",
+        "name_zh":  "循环训练（自重）",
+        "intensity_zh":  "中高",
+        "met":  6,
+        "kcal_30min_70kg":  210,
+        "source_code":  "02032",
+        "source_activity_en":  "Circuit training, body weight exercises"
+    },
+    {
+        "id":  "circuit_vigorous",
+        "category_zh":  "健身/力量",
+        "name_zh":  "循环训练（壶铃/少休息）",
+        "intensity_zh":  "高",
+        "met":  7.5,
+        "kcal_30min_70kg":  263,
+        "source_code":  "02040",
+        "source_activity_en":  "Circuit training, including kettlebells, some aerobic movement with minimal rest, general, vigorous intensity"
+    },
+    {
+        "id":  "kettlebell_swings",
+        "category_zh":  "健身/力量",
+        "name_zh":  "壶铃摆动",
+        "intensity_zh":  "很高",
+        "met":  9.8,
+        "kcal_30min_70kg":  343,
+        "source_code":  "02058",
+        "source_activity_en":  "Kettle bell swings"
+    },
+    {
+        "id":  "elliptical_moderate",
+        "category_zh":  "健身/力量",
+        "name_zh":  "椭圆机（中等）",
+        "intensity_zh":  "中高",
+        "met":  5,
+        "kcal_30min_70kg":  175,
+        "source_code":  "02048",
+        "source_activity_en":  "Elliptical trainer, moderate effort"
+    },
+    {
+        "id":  "elliptical_vigorous",
+        "category_zh":  "健身/力量",
+        "name_zh":  "椭圆机（高强度）",
+        "intensity_zh":  "很高",
+        "met":  9,
+        "kcal_30min_70kg":  315,
+        "source_code":  "02049",
+        "source_activity_en":  "Elliptical trainer, vigorous effort"
+    },
+    {
+        "id":  "rowing_moderate",
+        "category_zh":  "健身/力量",
+        "name_zh":  "划船机（中等）",
+        "intensity_zh":  "中高",
+        "met":  5,
+        "kcal_30min_70kg":  175,
+        "source_code":  "02071",
+        "source_activity_en":  "Rowing, stationary ergometer, general, \u003c100 watts, moderate effort"
+    },
+    {
+        "id":  "rowing_vigorous",
+        "category_zh":  "健身/力量",
+        "name_zh":  "划船机（高强度）",
+        "intensity_zh":  "高",
+        "met":  7.3,
+        "kcal_30min_70kg":  256,
+        "source_code":  "02070",
+        "source_activity_en":  "Rowing, stationary ergometer, general, vigorous effort"
+    },
+    {
+        "id":  "jump_rope_general",
+        "category_zh":  "健身/力量",
+        "name_zh":  "跳绳",
+        "intensity_zh":  "很高",
+        "met":  11,
+        "kcal_30min_70kg":  385,
+        "source_code":  "02068",
+        "source_activity_en":  "Rope skipping exercise, general"
+    },
+    {
+        "id":  "hiit_moderate",
+        "category_zh":  "健身/力量",
+        "name_zh":  "HIIT（中等）",
+        "intensity_zh":  "高",
+        "met":  7,
+        "kcal_30min_70kg":  245,
+        "source_code":  "02210",
+        "source_activity_en":  "High intensity interval exercise, moderate effort"
+    },
+    {
+        "id":  "hiit_vigorous",
+        "category_zh":  "健身/力量",
+        "name_zh":  "HIIT/Tabata（高强度）",
+        "intensity_zh":  "很高",
+        "met":  11,
+        "kcal_30min_70kg":  385,
+        "source_code":  "02214",
+        "source_activity_en":  "High intensity interval exercise, burpees, mountain climbers, squat jumps, Tabata, vigorous effort"
+    },
+    {
+        "id":  "stretching",
+        "category_zh":  "身心/柔韧",
+        "name_zh":  "拉伸",
+        "intensity_zh":  "轻",
+        "met":  2.3,
+        "kcal_30min_70kg":  81,
+        "source_code":  "02101",
+        "source_activity_en":  "Stretching, mild"
+    },
+    {
+        "id":  "pilates_mat",
+        "category_zh":  "身心/柔韧",
+        "name_zh":  "普拉提（垫上）",
+        "intensity_zh":  "轻",
+        "met":  1.8,
+        "kcal_30min_70kg":  63,
+        "source_code":  "02103",
+        "source_activity_en":  "Pilates, traditional, mat"
+    },
+    {
+        "id":  "pilates_general",
+        "category_zh":  "身心/柔韧",
+        "name_zh":  "普拉提",
+        "intensity_zh":  "轻",
+        "met":  2.8,
+        "kcal_30min_70kg":  98,
+        "source_code":  "02105",
+        "source_activity_en":  "Pilates, general"
+    },
+    {
+        "id":  "fitball",
+        "category_zh":  "身心/柔韧",
+        "name_zh":  "健身球训练",
+        "intensity_zh":  "轻",
+        "met":  2.8,
+        "kcal_30min_70kg":  98,
+        "source_code":  "02112",
+        "source_activity_en":  "Therapeutic exercise ball, Fitball exercise"
+    },
+    {
+        "id":  "hatha_yoga",
+        "category_zh":  "身心/柔韧",
+        "name_zh":  "哈他瑜伽",
+        "intensity_zh":  "轻",
+        "met":  2.3,
+        "kcal_30min_70kg":  81,
+        "source_code":  "02150",
+        "source_activity_en":  "Yoga, Hatha"
+    },
+    {
+        "id":  "vinyasa_yoga",
+        "category_zh":  "身心/柔韧",
+        "name_zh":  "流瑜伽",
+        "intensity_zh":  "轻中",
+        "met":  2.7,
+        "kcal_30min_70kg":  95,
+        "source_code":  "02185",
+        "source_activity_en":  "Yoga, Vinyasa"
+    },
+    {
+        "id":  "power_yoga",
+        "category_zh":  "身心/柔韧",
+        "name_zh":  "力量瑜伽",
+        "intensity_zh":  "中",
+        "met":  4,
+        "kcal_30min_70kg":  140,
+        "source_code":  "02160",
+        "source_activity_en":  "Yoga, Power"
+    },
+    {
+        "id":  "tai_chi_qigong",
+        "category_zh":  "身心/柔韧",
+        "name_zh":  "太极/气功",
+        "intensity_zh":  "轻中",
+        "met":  3.3,
+        "kcal_30min_70kg":  116,
+        "source_code":  "15670",
+        "source_activity_en":  "Tai chi, qi gong, general"
+    },
+    {
+        "id":  "tai_chi_yang",
+        "category_zh":  "身心/柔韧",
+        "name_zh":  "杨式太极拳",
+        "intensity_zh":  "中高",
+        "met":  6,
+        "kcal_30min_70kg":  210,
+        "source_code":  "15674",
+        "source_activity_en":  "Tai chi chuan, Yang style"
+    },
+    {
+        "id":  "zumba",
+        "category_zh":  "舞蹈",
+        "name_zh":  "尊巴",
+        "intensity_zh":  "高",
+        "met":  6.5,
+        "kcal_30min_70kg":  228,
+        "source_code":  "02310",
+        "source_activity_en":  "Zumba, group class"
+    },
+    {
+        "id":  "ballroom_slow",
+        "category_zh":  "舞蹈",
+        "name_zh":  "交谊舞（慢）",
+        "intensity_zh":  "轻中",
+        "met":  3,
+        "kcal_30min_70kg":  105,
+        "source_code":  "03040",
+        "source_activity_en":  "Ballroom, slow, examples: waltz, foxtrot, slow dancing, samba tango, rumba, mambo, cha cha"
+    },
+    {
+        "id":  "ballroom_fast",
+        "category_zh":  "舞蹈",
+        "name_zh":  "交谊舞（快）",
+        "intensity_zh":  "中高",
+        "met":  5.5,
+        "kcal_30min_70kg":  193,
+        "source_code":  "03030",
+        "source_activity_en":  "Ballroom dancing, fast"
+    },
+    {
+        "id":  "salsa_partner",
+        "category_zh":  "舞蹈",
+        "name_zh":  "萨尔萨舞",
+        "intensity_zh":  "中",
+        "met":  4.8,
+        "kcal_30min_70kg":  168,
+        "source_code":  "03090",
+        "source_activity_en":  "Salsa Dancing, with partner"
+    },
+    {
+        "id":  "square_dance",
+        "category_zh":  "舞蹈",
+        "name_zh":  "广场舞/民族舞",
+        "intensity_zh":  "中高",
+        "met":  5.5,
+        "kcal_30min_70kg":  193,
+        "source_code":  "03028",
+        "source_activity_en":  "Chinese square dance, Ballet \u0026 Tibetan dance"
+    },
+    {
+        "id":  "aerobic_square_dance",
+        "category_zh":  "舞蹈",
+        "name_zh":  "有氧广场舞",
+        "intensity_zh":  "高",
+        "met":  7.3,
+        "kcal_30min_70kg":  256,
+        "source_code":  "03029",
+        "source_activity_en":  "Chinese square dance, aerobic dance"
+    },
+    {
+        "id":  "ballet_jazz_class",
+        "category_zh":  "舞蹈",
+        "name_zh":  "芭蕾/现代/爵士舞课",
+        "intensity_zh":  "中高",
+        "met":  5,
+        "kcal_30min_70kg":  175,
+        "source_code":  "03010",
+        "source_activity_en":  "Ballet, modern, or jazz general, rehearsal or class"
+    },
+    {
+        "id":  "nightclub_folk_vigorous",
+        "category_zh":  "舞蹈",
+        "name_zh":  "夜店/民俗舞（高强度）",
+        "intensity_zh":  "很高",
+        "met":  9.8,
+        "kcal_30min_70kg":  343,
+        "source_code":  "03031",
+        "source_activity_en":  "Nightclub or folk dancing, vigorous effort"
+    },
+    {
+        "id":  "badminton_social",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "羽毛球（休闲）",
+        "intensity_zh":  "中高",
+        "met":  5.5,
+        "kcal_30min_70kg":  193,
+        "source_code":  "15030",
+        "source_activity_en":  "Badminton, social singles and doubles, general"
+    },
+    {
+        "id":  "badminton_match",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "羽毛球（比赛）",
+        "intensity_zh":  "很高",
+        "met":  9,
+        "kcal_30min_70kg":  315,
+        "source_code":  "15025",
+        "source_activity_en":  "Badminton, competitive, match play"
+    },
+    {
+        "id":  "basketball_game",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "篮球比赛",
+        "intensity_zh":  "高",
+        "met":  8,
+        "kcal_30min_70kg":  280,
+        "source_code":  "15040",
+        "source_activity_en":  "Basketball, game"
+    },
+    {
+        "id":  "basketball_shooting",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "篮球投篮练习",
+        "intensity_zh":  "中高",
+        "met":  5,
+        "kcal_30min_70kg":  175,
+        "source_code":  "15070",
+        "source_activity_en":  "Basketball, shooting baskets"
+    },
+    {
+        "id":  "soccer_casual",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "足球（休闲）",
+        "intensity_zh":  "高",
+        "met":  7,
+        "kcal_30min_70kg":  245,
+        "source_code":  "15610",
+        "source_activity_en":  "Soccer, casual, general"
+    },
+    {
+        "id":  "soccer_competitive",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "足球（比赛）",
+        "intensity_zh":  "很高",
+        "met":  9.5,
+        "kcal_30min_70kg":  333,
+        "source_code":  "15605",
+        "source_activity_en":  "Soccer, competitive"
+    },
+    {
+        "id":  "futsal",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "五人制足球",
+        "intensity_zh":  "高",
+        "met":  7.8,
+        "kcal_30min_70kg":  273,
+        "source_code":  "15195",
+        "source_activity_en":  "Futsal"
+    },
+    {
+        "id":  "table_tennis",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "乒乓球",
+        "intensity_zh":  "中",
+        "met":  4,
+        "kcal_30min_70kg":  140,
+        "source_code":  "15660",
+        "source_activity_en":  "Table tennis, ping pong"
+    },
+    {
+        "id":  "tennis_doubles",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "网球双打",
+        "intensity_zh":  "中",
+        "met":  4.5,
+        "kcal_30min_70kg":  158,
+        "source_code":  "15685",
+        "source_activity_en":  "Tennis, doubles"
+    },
+    {
+        "id":  "tennis_singles",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "网球单打",
+        "intensity_zh":  "高",
+        "met":  8,
+        "kcal_30min_70kg":  280,
+        "source_code":  "15690",
+        "source_activity_en":  "Tennis, singles"
+    },
+    {
+        "id":  "volleyball_recreational",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "排球（非竞技）",
+        "intensity_zh":  "轻中",
+        "met":  3,
+        "kcal_30min_70kg":  105,
+        "source_code":  "15720",
+        "source_activity_en":  "Volleyball, non-competitive, 6 - 9 member team, general"
+    },
+    {
+        "id":  "volleyball_competitive",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "排球（室内竞技）",
+        "intensity_zh":  "中高",
+        "met":  6,
+        "kcal_30min_70kg":  210,
+        "source_code":  "15711",
+        "source_activity_en":  "Volleyball, competitive, in gymnasium"
+    },
+    {
+        "id":  "beach_volleyball",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "沙滩排球",
+        "intensity_zh":  "高",
+        "met":  8,
+        "kcal_30min_70kg":  280,
+        "source_code":  "15725",
+        "source_activity_en":  "Volleyball, beach, in sand"
+    },
+    {
+        "id":  "softball_baseball",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "棒球/垒球",
+        "intensity_zh":  "中高",
+        "met":  5,
+        "kcal_30min_70kg":  175,
+        "source_code":  "15620",
+        "source_activity_en":  "Softball or baseball, fast or slow pitch, general, moderate effort"
+    },
+    {
+        "id":  "squash",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "壁球",
+        "intensity_zh":  "极高",
+        "met":  12,
+        "kcal_30min_70kg":  420,
+        "source_code":  "15650",
+        "source_activity_en":  "Squash"
+    },
+    {
+        "id":  "racquetball",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "短柄墙球",
+        "intensity_zh":  "高",
+        "met":  7,
+        "kcal_30min_70kg":  245,
+        "source_code":  "15530",
+        "source_activity_en":  "Racquetball, general"
+    },
+    {
+        "id":  "golf_general",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "高尔夫",
+        "intensity_zh":  "中",
+        "met":  4.5,
+        "kcal_30min_70kg":  158,
+        "source_code":  "15255",
+        "source_activity_en":  "Golf, general"
+    },
+    {
+        "id":  "golf_carry_clubs",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "高尔夫（步行背球杆）",
+        "intensity_zh":  "中",
+        "met":  4.3,
+        "kcal_30min_70kg":  151,
+        "source_code":  "15265",
+        "source_activity_en":  "Golf, walking, carrying clubs"
+    },
+    {
+        "id":  "bowling",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "保龄球",
+        "intensity_zh":  "轻中",
+        "met":  3,
+        "kcal_30min_70kg":  105,
+        "source_code":  "15090",
+        "source_activity_en":  "Bowling"
+    },
+    {
+        "id":  "billiards",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "台球",
+        "intensity_zh":  "轻",
+        "met":  2.5,
+        "kcal_30min_70kg":  88,
+        "source_code":  "15080",
+        "source_activity_en":  "Billiards"
+    },
+    {
+        "id":  "boxing_bag",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "拳击沙袋",
+        "intensity_zh":  "中高",
+        "met":  5.8,
+        "kcal_30min_70kg":  203,
+        "source_code":  "15110",
+        "source_activity_en":  "Boxing, punching bag"
+    },
+    {
+        "id":  "boxing_sparring",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "拳击陪练/对练",
+        "intensity_zh":  "高",
+        "met":  7.8,
+        "kcal_30min_70kg":  273,
+        "source_code":  "15120",
+        "source_activity_en":  "Boxing, sparring"
+    },
+    {
+        "id":  "boxing_ring",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "拳击擂台",
+        "intensity_zh":  "极高",
+        "met":  12.3,
+        "kcal_30min_70kg":  431,
+        "source_code":  "15100",
+        "source_activity_en":  "Boxing, in ring, general"
+    },
+    {
+        "id":  "martial_arts_slow",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "武术/格斗（慢速练习）",
+        "intensity_zh":  "中高",
+        "met":  5.3,
+        "kcal_30min_70kg":  186,
+        "source_code":  "15425",
+        "source_activity_en":  "Martial Arts, different types, slower pace, novice performers, practice"
+    },
+    {
+        "id":  "martial_arts_moderate",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "武术/格斗（中等）",
+        "intensity_zh":  "很高",
+        "met":  10.3,
+        "kcal_30min_70kg":  361,
+        "source_code":  "15430",
+        "source_activity_en":  "Martial Arts, different types, moderate pace"
+    },
+    {
+        "id":  "kickboxing",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "踢拳",
+        "intensity_zh":  "高",
+        "met":  7.3,
+        "kcal_30min_70kg":  256,
+        "source_code":  "15457",
+        "source_activity_en":  "Kickboxing"
+    },
+    {
+        "id":  "judo",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "柔道",
+        "intensity_zh":  "很高",
+        "met":  11.3,
+        "kcal_30min_70kg":  396,
+        "source_code":  "15433",
+        "source_activity_en":  "Judo"
+    },
+    {
+        "id":  "fencing",
+        "category_zh":  "球类/对抗",
+        "name_zh":  "击剑",
+        "intensity_zh":  "中高",
+        "met":  6,
+        "kcal_30min_70kg":  210,
+        "source_code":  "15200",
+        "source_activity_en":  "Fencing, general"
+    },
+    {
+        "id":  "climbing_general",
+        "category_zh":  "户外/滑行",
+        "name_zh":  "攀岩/登山",
+        "intensity_zh":  "高",
+        "met":  8,
+        "kcal_30min_70kg":  280,
+        "source_code":  "15533",
+        "source_activity_en":  "Rock or mountain climbing"
+    },
+    {
+        "id":  "climbing_low_moderate",
+        "category_zh":  "户外/滑行",
+        "name_zh":  "攀岩（低到中等难度）",
+        "intensity_zh":  "中高",
+        "met":  5.8,
+        "kcal_30min_70kg":  203,
+        "source_code":  "15537",
+        "source_activity_en":  "Rock climbing, ascending or traversing rock, low-to-moderate difficulty"
+    },
+    {
+        "id":  "skateboarding",
+        "category_zh":  "户外/滑行",
+        "name_zh":  "滑板",
+        "intensity_zh":  "中高",
+        "met":  5,
+        "kcal_30min_70kg":  175,
+        "source_code":  "15580",
+        "source_activity_en":  "Skateboarding, general, moderate effort"
+    },
+    {
+        "id":  "longboard_slow",
+        "category_zh":  "户外/滑行",
+        "name_zh":  "长板（慢速）",
+        "intensity_zh":  "高",
+        "met":  6.8,
+        "kcal_30min_70kg":  238,
+        "source_code":  "15595",
+        "source_activity_en":  "Skateboard, longboard, 13.3 km/h, slow speed"
+    },
+    {
+        "id":  "roller_skating",
+        "category_zh":  "户外/滑行",
+        "name_zh":  "轮滑/旱冰",
+        "intensity_zh":  "高",
+        "met":  7,
+        "kcal_30min_70kg":  245,
+        "source_code":  "15590",
+        "source_activity_en":  "Skating, roller"
+    },
+    {
+        "id":  "inline_skating_recreational",
+        "category_zh":  "户外/滑行",
+        "name_zh":  "直排轮（休闲）",
+        "intensity_zh":  "高",
+        "met":  7.5,
+        "kcal_30min_70kg":  263,
+        "source_code":  "15591",
+        "source_activity_en":  "Roller blading, in-line skating, 14.4 km/h (9.0 mph), recreational pace"
+    },
+    {
+        "id":  "horseback_riding",
+        "category_zh":  "户外/滑行",
+        "name_zh":  "骑马",
+        "intensity_zh":  "中高",
+        "met":  5.5,
+        "kcal_30min_70kg":  193,
+        "source_code":  "15370",
+        "source_activity_en":  "Horseback riding, general"
+    },
+    {
+        "id":  "frisbee_general",
+        "category_zh":  "户外/滑行",
+        "name_zh":  "飞盘",
+        "intensity_zh":  "轻中",
+        "met":  3,
+        "kcal_30min_70kg":  105,
+        "source_code":  "15240",
+        "source_activity_en":  "Frisbee playing, general"
+    },
+    {
+        "id":  "ultimate_frisbee",
+        "category_zh":  "户外/滑行",
+        "name_zh":  "极限飞盘",
+        "intensity_zh":  "高",
+        "met":  8,
+        "kcal_30min_70kg":  280,
+        "source_code":  "15250",
+        "source_activity_en":  "Frisbee, ultimate"
+    },
+    {
+        "id":  "kayaking",
+        "category_zh":  "水上运动",
+        "name_zh":  "皮划艇",
+        "intensity_zh":  "中高",
+        "met":  5,
+        "kcal_30min_70kg":  175,
+        "source_code":  "18100",
+        "source_activity_en":  "Kayaking, moderate effort"
+    },
+    {
+        "id":  "canoeing_pleasure",
+        "category_zh":  "水上运动",
+        "name_zh":  "划独木舟（休闲）",
+        "intensity_zh":  "中",
+        "met":  3.5,
+        "kcal_30min_70kg":  123,
+        "source_code":  "18070",
+        "source_activity_en":  "Canoeing, rowing, for pleasure, general"
+    },
+    {
+        "id":  "stand_up_paddleboard",
+        "category_zh":  "水上运动",
+        "name_zh":  "桨板",
+        "intensity_zh":  "高",
+        "met":  6.5,
+        "kcal_30min_70kg":  228,
+        "source_code":  "18224",
+        "source_activity_en":  "Stand up paddle boarding, general"
+    },
+    {
+        "id":  "snorkeling",
+        "category_zh":  "水上运动",
+        "name_zh":  "浮潜",
+        "intensity_zh":  "中高",
+        "met":  5,
+        "kcal_30min_70kg":  175,
+        "source_code":  "18210",
+        "source_activity_en":  "Snorkeling"
+    },
+    {
+        "id":  "surfing_general",
+        "category_zh":  "水上运动",
+        "name_zh":  "冲浪",
+        "intensity_zh":  "轻中",
+        "met":  3,
+        "kcal_30min_70kg":  105,
+        "source_code":  "18220",
+        "source_activity_en":  "Surfing, body or board, general"
+    },
+    {
+        "id":  "swim_leisure",
+        "category_zh":  "水上运动",
+        "name_zh":  "游泳（休闲）",
+        "intensity_zh":  "中高",
+        "met":  6,
+        "kcal_30min_70kg":  210,
+        "source_code":  "18310",
+        "source_activity_en":  "Swimming, leisurely, not lap swimming, general"
+    },
+    {
+        "id":  "swim_laps_slow",
+        "category_zh":  "水上运动",
+        "name_zh":  "自由泳慢速划水",
+        "intensity_zh":  "中高",
+        "met":  5.8,
+        "kcal_30min_70kg":  203,
+        "source_code":  "18240",
+        "source_activity_en":  "Swimming laps, freestyle, slow, recreational"
+    },
+    {
+        "id":  "swim_laps_fast",
+        "category_zh":  "水上运动",
+        "name_zh":  "自由泳快速划水",
+        "intensity_zh":  "很高",
+        "met":  9.8,
+        "kcal_30min_70kg":  343,
+        "source_code":  "18230",
+        "source_activity_en":  "Swimming laps, freestyle, fast, vigorous effort"
+    },
+    {
+        "id":  "swim_breaststroke_recreational",
+        "category_zh":  "水上运动",
+        "name_zh":  "蛙泳（休闲）",
+        "intensity_zh":  "中高",
+        "met":  5.3,
+        "kcal_30min_70kg":  186,
+        "source_code":  "18265",
+        "source_activity_en":  "Swimming breaststroke, recreational"
+    },
+    {
+        "id":  "water_aerobics",
+        "category_zh":  "水上运动",
+        "name_zh":  "水中有氧",
+        "intensity_zh":  "中高",
+        "met":  5.5,
+        "kcal_30min_70kg":  193,
+        "source_code":  "18355",
+        "source_activity_en":  "Water aerobics, water calisthenics, general"
+    },
+    {
+        "id":  "water_aerobics_high",
+        "category_zh":  "水上运动",
+        "name_zh":  "水中有氧（高强度）",
+        "intensity_zh":  "高",
+        "met":  7.5,
+        "kcal_30min_70kg":  263,
+        "source_code":  "18358",
+        "source_activity_en":  "Water aerobics, high intensity"
+    },
+    {
+        "id":  "water_jogging",
+        "category_zh":  "水上运动",
+        "name_zh":  "水中慢跑",
+        "intensity_zh":  "很高",
+        "met":  9.8,
+        "kcal_30min_70kg":  343,
+        "source_code":  "18366",
+        "source_activity_en":  "Water jogging, vigorous effort"
+    },
+    {
+        "id":  "water_polo",
+        "category_zh":  "水上运动",
+        "name_zh":  "水球",
+        "intensity_zh":  "很高",
+        "met":  10,
+        "kcal_30min_70kg":  350,
+        "source_code":  "18360",
+        "source_activity_en":  "Water polo"
+    },
+    {
+        "id":  "water_skiing",
+        "category_zh":  "水上运动",
+        "name_zh":  "滑水/尾波滑板",
+        "intensity_zh":  "中高",
+        "met":  6,
+        "kcal_30min_70kg":  210,
+        "source_code":  "18150",
+        "source_activity_en":  "Skiing, water or wake boarding"
+    },
+    {
+        "id":  "ice_skating_slow",
+        "category_zh":  "冬季运动",
+        "name_zh":  "滑冰（≤14.5km/h）",
+        "intensity_zh":  "中高",
+        "met":  5.5,
+        "kcal_30min_70kg":  193,
+        "source_code":  "19020",
+        "source_activity_en":  "Skating, ice, 9 mph or less"
+    },
+    {
+        "id":  "ice_skating_general",
+        "category_zh":  "冬季运动",
+        "name_zh":  "滑冰",
+        "intensity_zh":  "高",
+        "met":  7,
+        "kcal_30min_70kg":  245,
+        "source_code":  "19030",
+        "source_activity_en":  "Skating, ice, general"
+    },
+    {
+        "id":  "skiing_general",
+        "category_zh":  "冬季运动",
+        "name_zh":  "滑雪",
+        "intensity_zh":  "高",
+        "met":  7,
+        "kcal_30min_70kg":  245,
+        "source_code":  "19075",
+        "source_activity_en":  "Skiing, general"
+    },
+    {
+        "id":  "cross_country_skiing",
+        "category_zh":  "冬季运动",
+        "name_zh":  "越野滑雪（中等）",
+        "intensity_zh":  "高",
+        "met":  8.5,
+        "kcal_30min_70kg":  298,
+        "source_code":  "19090",
+        "source_activity_en":  "Skiing, cross country, 4.0-4.9 mph, moderate speed and effort, general"
+    },
+    {
+        "id":  "downhill_skiing_light",
+        "category_zh":  "冬季运动",
+        "name_zh":  "高山滑雪/单板（轻）",
+        "intensity_zh":  "中",
+        "met":  4.3,
+        "kcal_30min_70kg":  151,
+        "source_code":  "19150",
+        "source_activity_en":  "Skiing, downhill, alpine or snowboarding, light effort, active time only"
+    },
+    {
+        "id":  "downhill_skiing_moderate",
+        "category_zh":  "冬季运动",
+        "name_zh":  "高山滑雪/单板（中等）",
+        "intensity_zh":  "中高",
+        "met":  6.3,
+        "kcal_30min_70kg":  221,
+        "source_code":  "19160",
+        "source_activity_en":  "Skiing, downhill, alpine or snowboarding, moderate effort, general, active time only"
+    },
+    {
+        "id":  "snowshoeing",
+        "category_zh":  "冬季运动",
+        "name_zh":  "雪鞋行走",
+        "intensity_zh":  "中高",
+        "met":  5.3,
+        "kcal_30min_70kg":  186,
+        "source_code":  "19190",
+        "source_activity_en":  "Snow shoeing, moderate effort"
+    },
+    {
+        "id":  "snowboarding_recreational",
+        "category_zh":  "冬季运动",
+        "name_zh":  "单板滑雪（休闲）",
+        "intensity_zh":  "高",
+        "met":  7.5,
+        "kcal_30min_70kg":  263,
+        "source_code":  "19201",
+        "source_activity_en":  "Snowboarding, recreational, moderate pace, mountain"
+    },
+    {
+        "id":  "cooking_moderate",
+        "category_zh":  "日常活动",
+        "name_zh":  "做饭（中等）",
+        "intensity_zh":  "轻中",
+        "met":  3.5,
+        "kcal_30min_70kg":  123,
+        "source_code":  "05049",
+        "source_activity_en":  "Cooking or food preparation, moderate effort"
+    },
+    {
+        "id":  "laundry_light",
+        "category_zh":  "日常活动",
+        "name_zh":  "洗衣/晾衣（轻）",
+        "intensity_zh":  "轻",
+        "met":  2.3,
+        "kcal_30min_70kg":  81,
+        "source_code":  "05090",
+        "source_activity_en":  "Laundry, fold or hang clothes, put clothes in washer or dryer, packing suitcase, washing clothes by hand, implied standing, light effort"
+    },
+    {
+        "id":  "floor_scrubbing",
+        "category_zh":  "日常活动",
+        "name_zh":  "擦地/刷浴室",
+        "intensity_zh":  "中",
+        "met":  3.5,
+        "kcal_30min_70kg":  123,
+        "source_code":  "05130",
+        "source_activity_en":  "Scrubbing floors, on hands and knees, scrubbing bathroom, bathtub, moderate effort"
+    },
+    {
+        "id":  "moving_furniture",
+        "category_zh":  "日常活动",
+        "name_zh":  "搬家具/搬箱子",
+        "intensity_zh":  "中高",
+        "met":  5.8,
+        "kcal_30min_70kg":  203,
+        "source_code":  "05120",
+        "source_activity_en":  "Moving furniture, household items, carrying boxes"
+    },
+    {
+        "id":  "play_with_children_moderate",
+        "category_zh":  "日常活动",
+        "name_zh":  "陪孩子玩（走跑，中等）",
+        "intensity_zh":  "中",
+        "met":  3.5,
+        "kcal_30min_70kg":  123,
+        "source_code":  "05175",
+        "source_activity_en":  "Walking/running, playing with child(ren), moderate effort, only active periods"
+    },
+    {
+        "id":  "play_with_children_vigorous",
+        "category_zh":  "日常活动",
+        "name_zh":  "陪孩子玩（走跑，高强度）",
+        "intensity_zh":  "中高",
+        "met":  5.8,
+        "kcal_30min_70kg":  203,
+        "source_code":  "05180",
+        "source_activity_en":  "Walking/running, playing with child(ren), vigorous effort, only active periods"
+    },
+    {
+        "id":  "gardening_general",
+        "category_zh":  "日常活动",
+        "name_zh":  "园艺",
+        "intensity_zh":  "中",
+        "met":  3.8,
+        "kcal_30min_70kg":  133,
+        "source_code":  "08245",
+        "source_activity_en":  "Gardening, general, moderate effort"
+    },
+    {
+        "id":  "mowing_lawn",
+        "category_zh":  "日常活动",
+        "name_zh":  "推式割草",
+        "intensity_zh":  "中高",
+        "met":  5.5,
+        "kcal_30min_70kg":  193,
+        "source_code":  "08095",
+        "source_activity_en":  "Mowing lawn, general, walking, moderate effort"
+    },
+    {
+        "id":  "raking_leaves",
+        "category_zh":  "日常活动",
+        "name_zh":  "耙草/耙树叶",
+        "intensity_zh":  "中",
+        "met":  4,
+        "kcal_30min_70kg":  140,
+        "source_code":  "08160",
+        "source_activity_en":  "Raking lawn or leaves, moderate effort"
+    },
+    {
+        "id":  "shoveling_snow",
+        "category_zh":  "日常活动",
+        "name_zh":  "铲雪（中等）",
+        "intensity_zh":  "中高",
+        "met":  5.3,
+        "kcal_30min_70kg":  186,
+        "source_code":  "08195",
+        "source_activity_en":  "Shoveling snow, by hand, moderate effort"
+    }
+]
