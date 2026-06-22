@@ -12,8 +12,7 @@
           <img src="/assets/r6care-app-icon.png" alt="R6 Studio" />
         </span>
         <div>
-          <strong>R6 Care</strong>
-          <small>健康管理</small>
+          <strong>R6 Care</strong><small>健康管理</small>
         </div>
       </div>
 
@@ -6238,4 +6237,5 @@ select {
   }
 }
 </style>
+
 

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'r6-care-pwa-v1'
+const CACHE_NAME = 'r6-care-pwa-v2'
 const PRECACHE = [
   '/care/app/',
   '/care/app/index.html',
@@ -28,4 +28,5 @@ self.addEventListener('fetch', (event) => {
     }).catch(() => cached))
   )
 })
+
 
