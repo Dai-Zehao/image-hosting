@@ -1,0 +1,22 @@
+{
+  "name": "R6 Care",
+  "short_name": "R6 Care",
+  "description": "R6 Care 健康管理",
+  "start_url": "/care/app/",
+  "scope": "/care/app/",
+  "display": "standalone",
+  "background_color": "#eafdf8",
+  "theme_color": "#8cf0c6",
+  "icons": [
+    {
+      "src": "/care/app/assets/R6studio-logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/care/app/assets/R6studio-logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
